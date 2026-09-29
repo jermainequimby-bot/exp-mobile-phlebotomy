@@ -61,8 +61,7 @@ footer{background:#071126;color:#b9c7d9;padding:35px 5%}.footer-inner{max-width:
 </div>
 <p class="small" style="margin-top:16px"><b>20+ patients:</b> Boss Raid — custom contract based on patient volume, specimen requirements, scheduling window, location, and workflow.</p></section>
 
-<section class="container"><div class="two">
-<div class="card"><h3>🧪 Specimen Workflow</h3><p>EXP provides mobile collection and transport. Specimens are delivered to the designated receiving laboratory for processing/testing under that laboratory's procedures.</p><p class="small">Laboratory testing fees are separate unless specifically included in a written agreement.</p></div>
+
 
 <section class="container faq" id="faq"><div class="section-title"><h2>Frequently Asked Questions</h2></div>
 <details><summary>Do I need a lab order?</summary><p>When requested testing requires an order or requisition, the patient is responsible for having the required documentation available.</p></details>
@@ -72,19 +71,46 @@ footer{background:#071126;color:#b9c7d9;padding:35px 5%}.footer-inner{max-width:
 <details><summary>What if I need a same-day appointment?</summary><p>Fast Track EXP is available for same-day appointments when scheduling allows.</p></details>
 </section>
 
-<section class="booking" id="book"><div class="container"><div class="section-title"><h2>Book Your EXP</h2><p>Send an appointment request and we'll confirm availability and final pricing.</p></div>
-<div class="form"><form onsubmit="return sendRequest(event)"><div class="form-grid">
-<label>Full Name<input id="name" required></label><label>Phone<input id="phone" type="tel" required></label>
-<label>Email<input id="email" type="email"></label><label>Requested Date<input id="date" type="date" required></label>
-<label>Requested Time<input id="time" type="time"></label><label>Service<select id="service"><option>Standard EXP — $70</option><option>EXP Local — $60</option><option>Fast Track EXP — $95</option><option>After-Hours EXP — $90</option><option>Group / Facility</option></select></label>
-<label class="full">Service Address<input id="address" required></label>
-<label class="full">Notes / Collection Information<textarea id="notes" placeholder="Ordering provider, number of patients, specimen requirements, access instructions, etc."></textarea></label>
-<div class="full"><button class="btn primary" type="submit">Request Appointment</button><p class="note">Please do not enter sensitive medical information in this form. This is an appointment request, not a secure medical-record portal.</p></div>
-</div></form></div></div></section>
+<section class="booking" id="book"><div class="container"><div class="section-title"><h2>Book Your EXP Appointment</h2><p>Choose an available date and time below to schedule your mobile collection.</p></div>
+<div class="form">
+<div class="field" style="margin-bottom:18px">
+<label for="service-select"><strong>Select a Service</strong></label>
+<select id="service-select" name="service" style="width:100%;padding:12px;border:1px solid #d6dbe4;border-radius:8px;font:inherit;margin-top:7px">
+<option value="">Choose a service...</option>
+<option value="EXP Local — $60">EXP Local — $60</option>
+<option value="Standard EXP — $70">Standard EXP — $70</option>
+<option value="Fast Track / Same-Day EXP — $95">Fast Track / Same-Day EXP — $95</option>
+<option value="After-Hours EXP — $90">After-Hours EXP — $90</option>
+<option value="Group / Facility Visit">Group / Facility Visit</option>
+</select>
+<p class="note" style="margin-top:7px">Select the service you are requesting, then choose your appointment time below.</p>
+<div id="service-confirmation" class="note" style="display:none;margin-top:8px;padding:10px 12px;border-radius:8px;background:#eef8f8"><strong>Selected service:</strong> <span id="selected-service"></span></div>
+</div>
 
-<footer><div class="footer-inner"><div><b style="color:white">EXP: MOBILE PHLEBOTOMY</b><br>Professional collection. Delivered to you.</div><div>Panama City & surrounding areas<br>850-624-9838<br>jermaine@expmobilephlebotomy.com</div></div></footer>
+<h3 style="margin:0 0 12px">Choose Your Appointment Time</h3>
+<iframe src="https://calendar.google.com/calendar/appointments/AcZssZ2Uyz_otCUiXla5u_j1kat2OZCSKxbh4yWd--E=?gv=true" style="border:0;width:100%;min-height:650px" width="100%" height="650" frameborder="0" title="EXP Mobile Phlebotomy Appointment Scheduling"></iframe>
+<p class="note" style="margin-top:14px">Your service selection is shown above for your booking request. Because the Google Calendar scheduler is embedded separately, the selection is not automatically sent into the Google booking record. Please make sure your chosen service is also clear when completing the Google booking details.</p>
+<p class="note">Please do not enter sensitive medical information into appointment notes. This scheduler is for booking purposes and is not a secure medical-record portal.</p>
+<p class="note">Need help scheduling? Call <a href="tel:8506249838">850-624-9838</a> or email <a href="mailto:jermainequimby@gmail.com">jermainequimby@gmail.com</a>.</p></div></div></section>
+
+<footer><div class="footer-inner"><div><b style="color:white">EXP: MOBILE PHLEBOTOMY</b><br>Professional collection. Delivered to you.</div><div>Panama City & surrounding areas<br>850-624-9838<br>jermainequimby@gmail.com</div></div></footer>
 
 <script>
+const serviceSelect = document.getElementById('service-select');
+const serviceConfirmation = document.getElementById('service-confirmation');
+const selectedService = document.getElementById('selected-service');
+
+if (serviceSelect) {
+ serviceSelect.addEventListener('change', function(){
+   if (this.value) {
+     selectedService.textContent = this.value;
+     serviceConfirmation.style.display = 'block';
+   } else {
+     serviceConfirmation.style.display = 'none';
+   }
+ });
+}
+
 function sendRequest(e){
  e.preventDefault();
  const v=id=>document.getElementById(id).value;
