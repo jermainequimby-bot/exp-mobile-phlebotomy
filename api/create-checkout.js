@@ -50,7 +50,7 @@ export default async function handler(req,res){
     add(form,'line_items[0][price_data][product_data][name]',s.name);
     add(form,'line_items[0][price_data][product_data][description]',
       fee?'Includes $'+fee+' travel fee.':'Includes local travel.');
-    const origin=process.env.PUBLIC_SITE_URL||'https://expmobilephlebotomy.com';
+    const origin=process.env.VERCEL_ENV==='preview'&&process.env.VERCEL_URL?'https://'+process.env.VERCEL_URL:(process.env.PUBLIC_SITE_URL||'https://expmobilephlebotomy.com');
     add(form,'success_url',origin+'/booking-success.html?session_id={CHECKOUT_SESSION_ID}');
     add(form,'cancel_url',origin+'/booking.html');
     add(form,'metadata[service]',effectiveService);
