@@ -106,7 +106,7 @@ export default async function handler(req, res) {
     const day = isoWeekday(appointmentDate);
     const serviceType = effectiveService === 'after' ? 'after' : 'standard';
 
-    const ruleRows = await sql(
+    const ruleRows = await sql.query(
       `SELECT 1
        FROM availability_rules
        WHERE day_of_week = $1
@@ -124,7 +124,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const blockedRows = await sql(
+    const blockedRows = await sql.query(
       `SELECT 1
        FROM availability_overrides
        WHERE override_date = $1::date
@@ -145,7 +145,7 @@ export default async function handler(req, res) {
 
     // Hold the slot for 35 minutes. The database unique constraint makes
     // simultaneous attempts for the same slot safe.
-    const held = await sql(
+    const held = await sql.query(
       `INSERT INTO appointments (
          appointment_date,
          start_time,
@@ -267,7 +267,7 @@ export default async function handler(req, res) {
 
     if (!response.ok || !data.url) {
       console.error('Stripe API error', response.status, JSON.stringify(data));
-      await sql(
+      await sql.query(
         `UPDATE appointments
          SET status = 'expired', hold_expires_at = NOW(), updated_at = NOW()
          WHERE id = $1 AND status = 'held'`,
@@ -281,7 +281,7 @@ export default async function handler(req, res) {
       });
     }
 
-    await sql(
+    await sql.query(
       `UPDATE appointments
        SET stripe_session_id = $1, updated_at = NOW()
        WHERE id = $2`,
