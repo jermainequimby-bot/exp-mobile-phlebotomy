@@ -31,7 +31,7 @@ function clean(value, max = 300) {
 }
 
 function validEmail(value) {
-  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 export default async function handler(req, res) {
