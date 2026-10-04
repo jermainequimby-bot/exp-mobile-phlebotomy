@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
   try {
     const rules = await sql.query(
-      `SELECT start_time::text, end_time::text, slot_minutes
+      `SELECT start_time::text, end_time::text, slot_minutes, interval_minutes
        FROM availability_rules
        WHERE day_of_week = $1
          AND service_type = $2
@@ -61,17 +61,18 @@ export default async function handler(req, res) {
     const slots = [];
 
     for (const rule of rules) {
-      const step = Number(rule.slot_minutes) || SLOT_MINUTES;
+      const duration = Number(rule.slot_minutes) || SLOT_MINUTES;
+      const interval = Number(rule.interval_minutes) || duration;
       const start = timeToMinutes(rule.start_time);
       const end = timeToMinutes(rule.end_time);
 
-      for (let minute = start; minute + step <= end; minute += step) {
+      for (let minute = start; minute + duration <= end; minute += interval) {
         const startTime = minutesToTime(minute);
-        const endTime = minutesToTime(minute + step);
+        const endTime = minutesToTime(minute + duration);
 
         const blockedByOverride = blocked.some(item =>
           minute < timeToMinutes(item.end_time) &&
-          minute + step > timeToMinutes(item.start_time)
+          minute + duration > timeToMinutes(item.start_time)
         );
 
         if (
