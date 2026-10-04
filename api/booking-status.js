@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const rows = await sql(
+    const rows = await sql.query(
       `SELECT
          id,
          appointment_date::text AS appointment_date,
