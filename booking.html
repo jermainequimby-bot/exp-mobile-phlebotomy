@@ -1,4 +1,370 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book Your EXP | EXP: Mobile Phlebotomy</title><style>
-:root{--navy:#0b1730;--teal:#18c6b5;--ink:#172033;--muted:#64748b;--bg:#f6f9fc;--line:#dbe4ef}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}header{background:var(--navy);color:#fff;padding:18px 5%;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900}.brand span{color:var(--teal)}main{max-width:900px;margin:auto;padding:45px 5% 70px}.hero{text-align:center;margin-bottom:28px}.hero h1{font-size:clamp(34px,6vw,54px);margin:0;color:var(--navy)}.hero p{color:var(--muted)}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:0 10px 30px rgba(20,40,70,.06);margin-top:18px}h2{margin-top:0}.services{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.service{border:2px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;background:#fff;text-align:left}.service:hover{border-color:var(--teal)}.service.selected{border-color:var(--teal);background:#e9fbf8}.service strong{display:block;font-size:18px}.service span{font-size:25px;font-weight:900;color:var(--navy)}.service small{display:block;color:var(--muted);font-size:13px;margin-top:5px}label{display:block;font-weight:800;margin:15px 0 7px}input{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px}button{width:100%;margin-top:18px;padding:15px;border:0;border-radius:11px;background:var(--teal);color:var(--navy);font-size:17px;font-weight:900;cursor:pointer}.muted{color:var(--muted);font-size:14px}.total{background:var(--navy);color:#fff;border-radius:14px;padding:20px;margin-top:20px}.total-row{display:flex;justify-content:space-between;margin:6px 0}.grand{font-size:28px;font-weight:900;border-top:1px solid #52627a;padding-top:12px;margin-top:12px}.status{margin-top:15px;padding:12px;border-radius:10px;background:#eef6ff;color:#174a7e;display:none}.error{background:#fff1f2;color:#9f1239}.custom{display:none;background:#fff8e7;border:1px solid #f1c75b;padding:15px;border-radius:12px;margin-top:15px}@media(max-width:650px){.services{grid-template-columns:1fr}header{padding:15px 4%}}
-</style></head><body><header><div class="brand"><span>EXP</span>: MOBILE PHLEBOTOMY</div><div>Professional collection. Delivered to you.</div></header><main><section class="hero"><h1>Book Your EXP</h1><p>Choose your service, enter your collection address, and see your complete price before payment.</p></section><section class="panel"><h2>1. Choose your service</h2><div class="services" id="services"><button type="button" class="service selected" data-service="auto"><strong>EXP Local / Standard</strong><span>Starting at $60</span><small>Your exact price is based on driving distance.</small></button><button type="button" class="service" data-service="fast"><strong>Fast Track / Same-Day EXP</strong><span>$95</span><small>Priority same-day service, subject to availability. Travel fee may apply outside 10 miles.</small></button><button type="button" class="service" data-service="after"><strong>After-Hours EXP</strong><span>$90</span><small>Outside standard hours, subject to availability. Travel fee may apply outside 10 miles.</small></button></div></section><section class="panel"><h2>2. Where should we come to you?</h2><p class="muted">Your base service is automatically determined by driving distance from Florida Medical Lab, 631 W 23rd St, Panama City, FL 32405.</p><label for="address">Service address</label><input id="address" autocomplete="street-address" placeholder="123 Main St, Panama City, FL 32405"><button type="button" id="quote">Calculate my total</button><div id="status" class="status"></div><div id="custom" class="custom"><strong>Custom travel quote needed.</strong><br>This address is more than 25 driving miles from our service reference point. Please contact EXP at 850-624-9838 so we can confirm the travel charge before booking.</div><div id="total" class="total" style="display:none"><div class="total-row"><span id="serviceName"></span><strong id="servicePrice"></strong></div><div class="total-row"><span>Travel fee</span><strong id="travelFee"></strong></div><div class="total-row grand"><span>Total</span><strong id="grandTotal"></strong></div><button type="button" id="pay">Continue to secure payment</button></div></section><p class="muted" style="text-align:center;margin-top:20px">Please do not enter sensitive medical information. This page is for scheduling and payment, not medical records.</p></main><script>
-let selected={id:'auto'},quote=null;const statusEl=document.getElementById('status');document.querySelectorAll('.service').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.service').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');selected={id:b.dataset.service};quote=null;document.getElementById('total').style.display='none';document.getElementById('custom').style.display='none';}));function status(msg,error=false){statusEl.textContent=msg;statusEl.style.display=msg?'block':'none';statusEl.className='status'+(error?' error':'')}document.getElementById('quote').onclick=async()=>{const address=document.getElementById('address').value.trim();if(address.length<8)return status('Please enter the full service address.',true);status('Calculating driving distance…');try{const r=await fetch('/api/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service:selected.id,address})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Unable to calculate travel.');quote=d;if(d.custom){document.getElementById('total').style.display='none';document.getElementById('custom').style.display='block';status('');return}document.getElementById('custom').style.display='none';document.getElementById('serviceName').textContent=d.name;document.getElementById('servicePrice').textContent='$'+d.price.toFixed(2);document.getElementById('travelFee').textContent=d.travelFee===0?'$0.00':'+$'+d.travelFee.toFixed(2);document.getElementById('grandTotal').textContent='$'+d.total.toFixed(2);document.getElementById('total').style.display='block';status('Distance calculated: '+d.miles.toFixed(1)+' driving miles.')}catch(e){status(e.message,true)}};document.getElementById('pay').onclick=async()=>{if(!selected||!quote)return;const address=document.getElementById('address').value.trim();status('Preparing secure Stripe checkout…');try{const r=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service:selected.id,address,quote})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Unable to start checkout.');window.location.href=d.url}catch(e){status(e.message,true)}};</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Book Your EXP | EXP: Mobile Phlebotomy</title>
+<style>
+:root{--navy:#0b1730;--teal:#18c6b5;--ink:#172033;--muted:#64748b;--bg:#f6f9fc;--line:#dbe4ef;--danger:#9f1239}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:var(--navy);color:#fff;padding:18px 5%;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:900}.brand span{color:var(--teal)}
+main{max-width:900px;margin:auto;padding:45px 5% 70px}
+.hero{text-align:center;margin-bottom:28px}.hero h1{font-size:clamp(34px,6vw,54px);margin:0;color:var(--navy)}.hero p{color:var(--muted)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:0 10px 30px rgba(20,40,70,.06);margin-top:18px}
+h2{margin-top:0}
+.services{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.service{border:2px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;background:#fff;text-align:left}
+.service:hover{border-color:var(--teal)}.service.selected{border-color:var(--teal);background:#e9fbf8}
+.service strong{display:block;font-size:18px}.service span{font-size:25px;font-weight:900;color:var(--navy)}
+.service small{display:block;color:var(--muted);font-size:13px;margin-top:5px}
+label{display:block;font-weight:800;margin:15px 0 7px}
+input{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px}
+button{padding:15px;border:0;border-radius:11px;background:var(--teal);color:var(--navy);font-size:17px;font-weight:900;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.full{width:100%;margin-top:18px}
+.muted{color:var(--muted);font-size:14px}
+.status{margin-top:15px;padding:12px;border-radius:10px;background:#eef6ff;color:#174a7e;display:none}
+.error{background:#fff1f2;color:var(--danger)}
+.custom{display:none;background:#fff8e7;border:1px solid #f1c75b;padding:15px;border-radius:12px;margin-top:15px}
+.total{background:var(--navy);color:#fff;border-radius:14px;padding:20px;margin-top:20px;display:none}
+.total-row{display:flex;justify-content:space-between;margin:6px 0}.grand{font-size:28px;font-weight:900;border-top:1px solid #52627a;padding-top:12px;margin-top:12px}
+#schedule{display:none}
+.dates{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px}
+.date-btn{background:#fff;border:2px solid var(--line);color:var(--ink);padding:12px 8px}
+.date-btn.selected{border-color:var(--teal);background:#e9fbf8}
+.date-btn strong,.date-btn small{display:block}.date-btn small{color:var(--muted);margin-top:3px}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
+.slot{background:#fff;border:2px solid var(--line);color:var(--ink)}.slot.selected{border-color:var(--teal);background:#e9fbf8}
+.contact{display:none;margin-top:22px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.summary{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:15px}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+@media(max-width:650px){.services,.two{grid-template-columns:1fr}.dates{grid-template-columns:repeat(2,1fr)}.slots{grid-template-columns:repeat(2,1fr)}header{padding:15px 4%}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span>EXP</span>: MOBILE PHLEBOTOMY</div>
+  <div>Professional collection. Delivered to you.</div>
+</header>
+
+<main>
+<section class="hero">
+  <h1>Book Your EXP</h1>
+  <p>Choose your service, see your exact price, pick your appointment, and secure it with Stripe.</p>
+</section>
+
+<section class="panel">
+  <h2>1. Choose your service</h2>
+  <div class="services">
+    <button type="button" class="service selected" data-service="auto">
+      <strong>EXP Local / Standard</strong><span>Starting at $60</span>
+      <small>Exact price is based on driving distance.</small>
+    </button>
+    <button type="button" class="service" data-service="fast">
+      <strong>Fast Track / Same-Day EXP</strong><span>$95</span>
+      <small>Priority same-day service, subject to availability.</small>
+    </button>
+    <button type="button" class="service" data-service="after">
+      <strong>After-Hours EXP</strong><span>$90</span>
+      <small>Outside standard hours. Availability window will be added after final scheduling setup.</small>
+    </button>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>2. Where should we come to you?</h2>
+  <p class="muted">Your base service is automatically determined by driving distance from Florida Medical Lab, 631 W 23rd St, Panama City, FL 32405.</p>
+  <label for="address">Service address</label>
+  <input id="address" autocomplete="street-address" placeholder="123 Main St, Panama City, FL 32405">
+  <button type="button" id="quote" class="full">Calculate my total</button>
+
+  <div id="status" class="status"></div>
+
+  <div id="custom" class="custom">
+    <strong>Custom travel quote needed.</strong><br>
+    This address is more than 25 driving miles from our service reference point. Please contact EXP at 850-624-9838 so we can confirm the travel charge before booking.
+  </div>
+
+  <div id="total" class="total">
+    <div class="total-row"><span id="serviceName"></span><strong id="servicePrice"></strong></div>
+    <div class="total-row"><span>Travel fee</span><strong id="travelFee"></strong></div>
+    <div class="total-row grand"><span>Total</span><strong id="grandTotal"></strong></div>
+  </div>
+</section>
+
+<section class="panel" id="schedule">
+  <h2>3. Pick your appointment</h2>
+  <p class="muted">EXP currently accepts weekend appointments. All times are Central Time.</p>
+  <div id="dates" class="dates"></div>
+  <div id="slotStatus" class="status"></div>
+  <div id="slots" class="slots"></div>
+
+  <div id="contact" class="contact">
+    <h2>4. Your contact information</h2>
+    <div class="two">
+      <div>
+        <label for="customerName">Name</label>
+        <input id="customerName" autocomplete="name" placeholder="Your full name">
+      </div>
+      <div>
+        <label for="customerPhone">Phone</label>
+        <input id="customerPhone" autocomplete="tel" placeholder="850-555-1234">
+      </div>
+    </div>
+    <label for="customerEmail">Email</label>
+    <input id="customerEmail" type="email" autocomplete="email" placeholder="you@example.com">
+
+    <div id="bookingSummary" class="summary"></div>
+    <p class="note">Your selected slot is reserved when you continue to secure payment. Stripe Checkout gives you 30 minutes to complete payment.</p>
+    <button type="button" id="pay" class="full" disabled>Secure appointment with Stripe</button>
+  </div>
+</section>
+
+<p class="muted" style="text-align:center;margin-top:20px">
+  Please do not enter sensitive medical information. This page is for scheduling and payment, not medical records.
+</p>
+</main>
+
+<script>
+let selected = { id: 'auto' };
+let quote = null;
+let selectedDate = null;
+let selectedSlot = null;
+
+const statusEl = document.getElementById('status');
+const slotStatusEl = document.getElementById('slotStatus');
+
+function status(message, error = false) {
+  statusEl.textContent = message;
+  statusEl.style.display = message ? 'block' : 'none';
+  statusEl.className = 'status' + (error ? ' error' : '');
+}
+
+function slotStatus(message, error = false) {
+  slotStatusEl.textContent = message;
+  slotStatusEl.style.display = message ? 'block' : 'none';
+  slotStatusEl.className = 'status' + (error ? ' error' : '');
+}
+
+function resetSchedule() {
+  quote = null;
+  selectedDate = null;
+  selectedSlot = null;
+  document.getElementById('total').style.display = 'none';
+  document.getElementById('custom').style.display = 'none';
+  document.getElementById('schedule').style.display = 'none';
+  document.getElementById('contact').style.display = 'none';
+  document.getElementById('dates').innerHTML = '';
+  document.getElementById('slots').innerHTML = '';
+  document.getElementById('pay').disabled = true;
+}
+
+document.querySelectorAll('.service').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.service').forEach(x => x.classList.remove('selected'));
+    button.classList.add('selected');
+    selected = { id: button.dataset.service };
+    resetSchedule();
+  });
+});
+
+function formatDate(date) {
+  const d = new Date(date + 'T12:00:00Z');
+  return {
+    day: d.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }),
+    label: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
+  };
+}
+
+function localISODate(offset) {
+  const now = new Date();
+  now.setUTCHours(12, 0, 0, 0);
+  now.setUTCDate(now.getUTCDate() + offset);
+  return now.toISOString().slice(0, 10);
+}
+
+function addDays(dateString, amount) {
+  const d = new Date(dateString + 'T12:00:00Z');
+  d.setUTCDate(d.getUTCDate() + amount);
+  return d.toISOString().slice(0, 10);
+}
+
+async function loadSlots(date, button) {
+  selectedDate = date;
+  selectedSlot = null;
+  document.querySelectorAll('.date-btn').forEach(x => x.classList.remove('selected'));
+  button.classList.add('selected');
+  document.getElementById('contact').style.display = 'none';
+  document.getElementById('pay').disabled = true;
+  document.getElementById('slots').innerHTML = '';
+  slotStatus('Loading available times…');
+
+  try {
+    const response = await fetch('/api/availability?date=' + encodeURIComponent(date) + '&service=' + encodeURIComponent(selected.id));
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Unable to load availability.');
+
+    if (!data.slots.length) {
+      slotStatus(selected.id === 'after'
+        ? 'No after-hours slots are configured yet. We will add your exact after-hours window next.'
+        : 'No appointment times are available on this date. Please choose another date.');
+      return;
+    }
+
+    slotStatus('');
+    const slotsEl = document.getElementById('slots');
+
+    data.slots.forEach(slot => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'slot';
+      button.textContent = formatTime(slot.start);
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.slot').forEach(x => x.classList.remove('selected'));
+        button.classList.add('selected');
+        selectedSlot = slot;
+        document.getElementById('contact').style.display = 'block';
+        updateSummary();
+      });
+      slotsEl.appendChild(button);
+    });
+  } catch (error) {
+    slotStatus(error.message, true);
+  }
+}
+
+function formatTime(value) {
+  const [hour, minute] = value.split(':').map(Number);
+  const d = new Date();
+  d.setHours(hour, minute, 0, 0);
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+function updateSummary() {
+  if (!quote || !selectedDate || !selectedSlot) return;
+  const date = formatDate(selectedDate);
+  document.getElementById('bookingSummary').innerHTML =
+    '<strong>' + quote.name + '</strong><br>' +
+    date.day + ', ' + date.label + ' at ' + formatTime(selectedSlot.start) + ' Central Time<br>' +
+    '<span style="color:#64748b">Total: $' + quote.total.toFixed(2) + '</span>';
+  validatePay();
+}
+
+function validatePay() {
+  const ready =
+    selectedDate &&
+    selectedSlot &&
+    document.getElementById('customerName').value.trim().length >= 2 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('customerEmail').value.trim()) &&
+    document.getElementById('customerPhone').value.trim().length >= 7;
+  document.getElementById('pay').disabled = !ready;
+}
+
+document.getElementById('quote').onclick = async () => {
+  const address = document.getElementById('address').value.trim();
+  if (address.length < 8) return status('Please enter the full service address.', true);
+
+  status('Calculating driving distance…');
+  resetSchedule();
+
+  try {
+    const response = await fetch('/api/quote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ service: selected.id, address })
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Unable to calculate travel.');
+
+    quote = data;
+
+    if (data.custom) {
+      status('');
+      document.getElementById('custom').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('serviceName').textContent = data.name;
+    document.getElementById('servicePrice').textContent = '$' + data.price.toFixed(2);
+    document.getElementById('travelFee').textContent = data.travelFee === 0 ? '$0.00' : '+$' + data.travelFee.toFixed(2);
+    document.getElementById('grandTotal').textContent = '$' + data.total.toFixed(2);
+    document.getElementById('total').style.display = 'block';
+    status('Distance calculated: ' + data.miles.toFixed(1) + ' driving miles.');
+    buildDates();
+  } catch (error) {
+    status(error.message, true);
+  }
+};
+
+function buildDates() {
+  const datesEl = document.getElementById('dates');
+  datesEl.innerHTML = '';
+  const today = localISODate(0);
+  let added = 0;
+
+  for (let offset = 0; offset < 30 && added < 8; offset++) {
+    const date = addDays(today, offset);
+    const weekday = new Date(date + 'T12:00:00Z').getUTCDay();
+    if (weekday !== 0 && weekday !== 6) continue;
+
+    const display = formatDate(date);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'date-btn';
+    button.innerHTML = '<strong>' + display.day + '</strong><small>' + display.label + '</small>';
+    button.addEventListener('click', () => loadSlots(date, button));
+    datesEl.appendChild(button);
+    added++;
+  }
+
+  document.getElementById('schedule').style.display = 'block';
+  const first = datesEl.querySelector('.date-btn');
+  if (first) first.click();
+}
+
+['customerName', 'customerEmail', 'customerPhone'].forEach(id => {
+  document.getElementById(id).addEventListener('input', validatePay);
+});
+
+document.getElementById('pay').onclick = async () => {
+  if (!quote || !selectedDate || !selectedSlot) return;
+
+  const address = document.getElementById('address').value.trim();
+  const customerName = document.getElementById('customerName').value.trim();
+  const customerEmail = document.getElementById('customerEmail').value.trim();
+  const customerPhone = document.getElementById('customerPhone').value.trim();
+
+  status('Reserving your appointment and preparing secure Stripe checkout…');
+
+  try {
+    const response = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        service: selected.id,
+        address,
+        quote,
+        appointmentDate: selectedDate,
+        startTime: selectedSlot.start,
+        customerName,
+        customerEmail,
+        customerPhone
+      })
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Unable to start checkout.');
+
+    window.location.href = data.url;
+  } catch (error) {
+    status(error.message, true);
+    await loadSlots(selectedDate, document.querySelector('.date-btn.selected'));
+  }
+};
+</script>
+</body>
+</html>

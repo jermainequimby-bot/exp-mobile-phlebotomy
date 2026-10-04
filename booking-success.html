@@ -1,1 +1,68 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment Received | EXP</title><style>body{font-family:Arial;margin:0;background:#f6f9fc;color:#172033}.box{max-width:650px;margin:10vh auto;padding:35px;background:#fff;border-radius:18px;border:1px solid #dbe4ef;text-align:center}h1{color:#0b1730}.ok{font-size:48px;color:#18c6b5}.btn{display:inline-block;margin-top:20px;padding:13px 20px;background:#18c6b5;color:#0b1730;text-decoration:none;border-radius:10px;font-weight:800}</style></head><body><div class="box"><div class="ok">✓</div><h1>Payment received</h1><p>Your EXP payment was received successfully.</p><p><strong>Next step:</strong> choose your appointment time. During this first rollout, appointment selection remains on your Google booking pages while we finish the calendar integration.</p><p>If you need help, call <strong>850-624-9838</strong>.</p><a class="btn" href="https://expmobilephlebotomy.com/">Return to EXP</a></div></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Appointment Confirmed | EXP</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f6f9fc;color:#172033}
+.box{max-width:680px;margin:8vh auto;padding:35px;background:#fff;border-radius:18px;border:1px solid #dbe4ef;text-align:center;box-shadow:0 10px 30px rgba(20,40,70,.06)}
+h1{color:#0b1730}.ok{font-size:52px;color:#18c6b5}
+.summary{background:#f8fafc;border:1px solid #dbe4ef;border-radius:12px;padding:18px;text-align:left;margin-top:22px}
+.btn{display:inline-block;margin-top:22px;padding:13px 20px;background:#18c6b5;color:#0b1730;text-decoration:none;border-radius:10px;font-weight:800}
+.muted{color:#64748b}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="ok">✓</div>
+  <h1>Appointment secured</h1>
+  <p id="message">We received your payment and are confirming your EXP appointment.</p>
+  <div id="summary" class="summary" style="display:none"></div>
+  <p class="muted">A confirmation email will be added to the EXP system next. If you need help, call <strong>850-624-9838</strong>.</p>
+  <a class="btn" href="https://expmobilephlebotomy.com/">Return to EXP</a>
+</div>
+<script>
+const sessionId = new URLSearchParams(location.search).get('session_id');
+
+function formatTime(value) {
+  const [hour, minute] = value.split(':').map(Number);
+  const d = new Date();
+  d.setHours(hour, minute, 0, 0);
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+async function load() {
+  if (!sessionId) return;
+
+  for (let attempt = 0; attempt < 8; attempt++) {
+    try {
+      const response = await fetch('/api/booking-status?session_id=' + encodeURIComponent(sessionId));
+      if (response.ok) {
+        const data = await response.json();
+        const booking = data.appointment;
+
+        if (booking.status === 'paid') {
+          document.getElementById('message').textContent = 'Your payment was received and your appointment is confirmed.';
+          document.getElementById('summary').style.display = 'block';
+          document.getElementById('summary').innerHTML =
+            '<strong>' + booking.service + '</strong><br>' +
+            booking.date + ' at ' + formatTime(booking.start) + ' Central Time<br>' +
+            '<br><strong>Total paid:</strong> $' + booking.total.toFixed(2) +
+            '<br><strong>Collection address:</strong> ' + booking.address;
+          return;
+        }
+      }
+    } catch (error) {}
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+  }
+
+  document.getElementById('message').textContent =
+    'Your payment was submitted. We are still waiting for the payment confirmation signal. Please keep this page open for a moment, or call 850-624-9838 if you need immediate confirmation.';
+}
+
+load();
+</script>
+</body>
+</html>
