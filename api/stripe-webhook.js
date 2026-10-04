@@ -94,7 +94,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ received: true });
       }
 
-      const rows = await sql(
+      const rows = await sql.query(
         `SELECT id, status, hold_expires_at, stripe_payment_intent_id
          FROM appointments
          WHERE id = $1
@@ -118,7 +118,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ received: true });
       }
 
-      const paid = await sql(
+      const paid = await sql.query(
         `UPDATE appointments
          SET status = 'paid',
              stripe_session_id = $1,
@@ -145,7 +145,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ received: true });
       }
 
-      await sql(
+      await sql.query(
         `UPDATE appointments
          SET status = 'conflict',
              stripe_session_id = $1,
@@ -168,7 +168,7 @@ export default async function handler(req, res) {
       const appointmentId = Number(session.metadata?.appointment_id);
 
       if (Number.isFinite(appointmentId)) {
-        await sql(
+        await sql.query(
           `UPDATE appointments
            SET status = 'expired',
                hold_expires_at = NOW(),
