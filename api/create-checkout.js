@@ -58,7 +58,7 @@ export default async function handler(req, res) {
     if (address.length < 8) {
       return json(res, 400, { error: 'Please provide the complete service address.' });
     }
-    if (!validDate(appointmentDate) || !/^\\d{2}:\\d{2}$/.test(startTime)) {
+    if (!validDate(appointmentDate) || !/^\d{2}:\d{2}$/.test(startTime)) {
       return json(res, 400, { error: 'Please choose a valid appointment date and time.' });
     }
     if (!slotIsFuture(appointmentDate, startTime)) {
