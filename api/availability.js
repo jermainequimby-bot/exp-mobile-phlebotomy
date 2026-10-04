@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   const day = isoWeekday(date);
 
   try {
-    const rules = await sql(
+    const rules = await sql.query(
       `SELECT start_time::text, end_time::text, slot_minutes
        FROM availability_rules
        WHERE day_of_week = $1
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
       [day, serviceType]
     );
 
-    const blocked = await sql(
+    const blocked = await sql.query(
       `SELECT start_time::text, end_time::text
        FROM availability_overrides
        WHERE override_date = $1::date
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       [date, serviceType]
     );
 
-    const booked = await sql(
+    const booked = await sql.query(
       `SELECT start_time::text
        FROM appointments
        WHERE appointment_date = $1::date
