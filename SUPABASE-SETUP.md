@@ -68,3 +68,12 @@ Confirm exactly one row was updated. If zero rows were updated, stop and investi
 `supabase/migrations/202610110003_self_access_status.sql` adds `public.get_my_staff_access()`. It accepts no user selector, filters on `auth.uid()`, has a fixed empty `search_path`, revokes execution from `PUBLIC` and `anon`, and grants execution to `authenticated`. It is only a status check; it is not a replacement for authorization checks on future server endpoints.
 
 See `AUTH-GATE-PLAN.md` for the fail-closed sign-in flow and required verification. Google sign-in must remain disabled until the flow is implemented and reviewed. The dashboard must remain a fictional-data prototype. Do not add live integrations until the project and credentials are explicitly configured by the business owner.
+
+
+## Admin preview gate status (staging only)
+
+The current `admin.html` now starts locked and includes a Google OAuth sign-in flow that calls `get_my_staff_access()`. It admits only a single matching profile where `is_active = true` and `role = owner`; missing profiles, non-owner roles, and verification errors fail closed.
+
+Before trying the UI, configure the two `EXP_SUPABASE_URL` and `EXP_SUPABASE_ANON_KEY` constants in `admin.html` using the staging project's Project URL and publishable/anon key. These are browser-side values; never put a service-role key or any secret in this file. The current placeholders intentionally keep the dashboard locked. Commit this configuration only to the staging feature branch, not the production branch.
+
+The Google provider must remain disabled until the gate and redirect behavior are reviewed. Once configured, test the preview with provider still disabled first, then coordinate the first OAuth test. Do not activate the owner profile until the intended Google identity has signed in and its exact Auth UUID/email have been verified. Do not use real customer/payment data: the gate is a UI/session check, and the dashboard is still static sample data. The real data API and server-side authorization boundary are not implemented.
