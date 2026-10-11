@@ -58,7 +58,7 @@
 </section>
 <section class="section-view" id="view-appointments">
  <div class="hello"><div><h2>Appointments</h2><p>Sample records only. Status and payment status stay separate.</p></div><button class="btn primary" id="newAppointment">＋ New appointment</button></div>
- <div class="notice">Demo safety: actions change only this browser preview. Nothing is sent to a customer or payment provider.</div>
+ <div class="notice" id="appointmentDataNotice" role="status">Sample appointments are shown until the read-only live connection is verified. Actions remain preview-only.</div>
  <div class="panel"><div class="toolbar"><input id="apptSearch" placeholder="Search sample appointments…" aria-label="Search appointments"><select id="statusFilter" aria-label="Filter appointment status"><option value="">All appointment statuses</option><option>Confirmed</option><option>In progress</option><option>Completed</option><option>Follow-up needed</option><option>Awaiting payment</option><option>Canceled</option><option>No-show</option></select><select id="serviceFilter" aria-label="Filter service"><option value="">All services</option><option>EXP Local</option><option>Standard EXP</option><option>Fast Track EXP</option><option>After-Hours EXP</option></select></div><div id="appointmentList"></div></div>
 </section>
 <section class="section-view" id="view-attention">
@@ -94,7 +94,7 @@
 </nav>
 <dialog id="demoDialog" style="border:0;border-radius:16px;padding:0;max-width:460px;width:calc(100% - 28px);box-shadow:0 20px 80px #07112655"><form method="dialog" id="demoForm"><div style="padding:20px 22px;background:#0b1730;color:#fff"><strong id="dialogTitle">Demo action</strong><div style="font-size:11px;color:#c5d2e5;margin-top:4px">Preview only · no live changes</div></div><div id="dialogBody" style="padding:22px;display:grid;gap:13px"></div><div style="padding:14px 22px;display:flex;justify-content:flex-end;gap:9px;background:#f7f9fc"><button class="btn" value="cancel">Cancel</button><button class="btn primary" id="dialogSave" value="default">Preview action</button></div></form></dialog>
 <script>
-const appointments=[
+let appointments=[
 {id:"EXP-101",time:"8:00 AM",name:"Taylor Morgan",phone:"850-555-0101",service:"EXP Local",price:60,status:"Completed",payment:"Paid",address:"Sample address · Panama City",outcome:"Successful collection"},
 {id:"EXP-102",time:"9:15 AM",name:"Jordan Ellis",phone:"850-555-0102",service:"Standard EXP",price:70,status:"Confirmed",payment:"Paid",address:"Sample address · Lynn Haven",outcome:"Not recorded"},
 {id:"EXP-103",time:"10:30 AM",name:"Casey Reed",phone:"850-555-0103",service:"Standard EXP",price:70,status:"In progress",payment:"Paid",address:"Sample address · Panama City",outcome:"Not recorded"},
@@ -114,6 +114,7 @@ let activity=[
 {time:"Today · 8:10 AM",text:"Sample appointment completed",detail:"EXP-101 · Outcome recorded"},
 {time:"Yesterday · 4:25 PM",text:"Sample appointment confirmed",detail:"EXP-104 · Demo event"}
 ];
+let appointmentDataMode='sample';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pill=s=>'<span class="pill '+({"Confirmed":"confirmed","Paid":"confirmed","Completed":"done","In progress":"inprogress","Awaiting payment":"awaiting","Pending":"awaiting","Follow-up needed":"follow"}[s]||"done")+'">'+esc(s)+'</span>';
@@ -123,6 +124,12 @@ function issueHtml(i){return '<div class="issue"><div class="issue-icon '+(i.pri
 function activityHtml(a){return '<div class="issue"><div class="issue-icon">↻</div><div><strong>'+esc(a.text)+'</strong><p>'+esc(a.detail)+' · '+esc(a.time)+'</p></div></div>'}
 function table(headers,rows){return '<div class="table-wrap"><table class="table"><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>'}
 function render(){
+const dataNotice=$('#appointmentDataNotice');
+if(dataNotice){
+  dataNotice.textContent=appointmentDataMode==='live'?'Live Supabase appointment records loaded (read-only). Other dashboard sections and all actions remain sample/preview-only.':appointmentDataMode==='error'?'Live appointment records could not be loaded. The list below is sample data only; no live records are being displayed.':'Sample appointments are shown until the read-only live connection is verified. Actions remain preview-only.';
+  dataNotice.style.background=appointmentDataMode==='live'?'#f0faf8':appointmentDataMode==='error'?'#fff4d7':'';
+  dataNotice.style.color=appointmentDataMode==='error'?'#674b00':'';
+}
 $('#homeAppointments').innerHTML=appointments.map(a=>apptCard(a,true)).join('');
 $('#homeTasks').innerHTML=tasks.filter(t=>!t.done).map(taskHtml).join('')||'<div class="empty">No open sample follow-ups.</div>';
 $('#homeIssues').innerHTML=issues.filter(i=>i.open).slice(0,3).map(issueHtml).join('')||'<div class="empty">All sample issues resolved.</div>';
@@ -133,7 +140,7 @@ $('#homeActivity').innerHTML=activity.slice(0,3).map(activityHtml).join('');
 $('#activityList').innerHTML=activity.map(activityHtml).join('');
 const q=($('#apptSearch')?.value||'').toLowerCase(),st=$('#statusFilter')?.value||'',sv=$('#serviceFilter')?.value||'';
 const filtered=appointments.filter(a=>(!q||(a.name+' '+a.id+' '+a.phone+' '+a.service).toLowerCase().includes(q))&&(!st||a.status===st)&&(!sv||a.service===sv));
-$('#appointmentList').innerHTML=filtered.length?filtered.map(a=>apptCard(a)).join(''):'<div class="empty">No sample appointments match those filters.</div>';
+$('#appointmentList').innerHTML=filtered.length?filtered.map(a=>apptCard(a)).join(''):'<div class="empty">'+(appointmentDataMode==='live'?'No live appointments match those filters.':'No sample appointments match those filters.')+'</div>';
 const cq=($('#customerSearch')?.value||'').toLowerCase();
 const people=[...new Map(appointments.map(a=>[a.name,a])).values()].filter(a=>(a.name+' '+a.phone).toLowerCase().includes(cq));
 $('#customerList').innerHTML=table(['Customer','Contact','Appointments','Latest status'],people.map(a=>'<tr><td><strong>'+esc(a.name)+'</strong><small>Fictional demo profile</small></td><td>'+esc(a.phone)+'</td><td>'+appointments.filter(x=>x.name===a.name).length+'</td><td>'+pill(a.status)+'</td></tr>'));
@@ -172,6 +179,29 @@ $('#newAppointment').onclick=()=>dialog('New appointment · design preview','<p>
 $('#newTask').onclick=()=>dialog('Create follow-up · demo','<label>Task title<input id="taskTitle" placeholder="What needs follow-up?" required style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"></label><label>Customer<select id="taskCustomer" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px">'+appointments.map(a=>'<option>'+esc(a.name)+'</option>').join('')+'</select></label><label>Due date/time<input id="taskDue" type="datetime-local" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"></label>','Add sample task',()=>{const title=$('#taskTitle').value.trim();if(!title){alert('Enter a task title.');return false}tasks.push({id:'T-'+(tasks.length+1),title,customer:$('#taskCustomer').value,due:$('#taskDue').value||'Due date not set',done:false});log('Sample follow-up created',title);render()});
 $('#blockTime').onclick=()=>{$('#blockResult').innerHTML='Preview only: before a real block is saved, the system must identify conflicting appointments and require you to resolve them. No live availability was changed.';log('Availability block flow previewed','No slot changed')};
 render();
+// Read-only appointment loading starts only after the authenticated owner gate approves access.
+async function loadLiveAppointments(){
+  if(!window.expSupabase) return;
+  try{
+    const {data,error}=await window.expSupabase.from('appointments')
+      .select('id,service_code,service_name,starts_at,ends_at,timezone,status,quoted_amount_cents,currency,payment_status,collection_outcome,customers(full_name,phone)')
+      .order('starts_at',{ascending:true}).limit(100);
+    if(error) throw error;
+    appointments=(data||[]).map(row=>{
+      const start=new Date(row.starts_at);
+      const time=new Intl.DateTimeFormat('en-US',{timeZone:row.timezone||'America/Chicago',hour:'numeric',minute:'2-digit'}).format(start);
+      const statusLabels={awaiting_payment:'Awaiting payment',confirmed:'Confirmed',in_progress:'In progress',completed:'Completed',follow_up_needed:'Follow-up needed',canceled:'Canceled',no_show:'No-show'};
+      const paymentLabels={pending:'Pending',paid:'Paid',failed:'Failed',partially_refunded:'Partially refunded',refunded:'Refunded'};
+      return {id:String(row.id).slice(0,8),time,name:row.customers?.full_name||'Customer record',phone:row.customers?.phone||'',service:row.service_name||row.service_code||'Service',price:((row.quoted_amount_cents||0)/100).toFixed(2),status:statusLabels[row.status]||row.status,payment:paymentLabels[row.payment_status]||row.payment_status,address:'Address available in the protected customer record',outcome:row.collection_outcome||'Not recorded'};
+    });
+    appointmentDataMode='live';
+  }catch(error){
+    appointmentDataMode='error';
+    console.error('EXP read-only appointment load failed:',error);
+  }
+  render();
+}
+window.addEventListener('exp-auth-approved',loadLiveAppointments);
 </script>
 
 <style>
@@ -249,6 +279,8 @@ async function expCheckSession(session) {
     }
     expGate.hidden = true;
     document.body.classList.add('exp-auth-approved');
+    window.expSupabase = expSupabase;
+    window.dispatchEvent(new Event('exp-auth-approved'));
   } catch (err) {
     document.body.classList.remove('exp-auth-approved');
     expGate.hidden = false;
