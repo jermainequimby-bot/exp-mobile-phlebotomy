@@ -124,66 +124,7 @@ function taskHtml(t){return '<div class="task"><input type="checkbox" aria-label
 function issueHtml(i){return '<div class="issue"><div class="issue-icon '+(i.priority==='red'?'red':'')+'">'+(i.priority==='red'?'!':'⚑')+'</div><div style="flex:1"><strong>'+esc(i.title)+'</strong><p>'+esc(i.desc)+'</p>'+(i.open?'<button class="btn small" data-resolve="'+i.id+'">Mark resolved in preview</button>':'<span class="pill done">Resolved in preview</span>')+'</div></div>'}
 function activityHtml(a){return '<div class="issue"><div class="issue-icon">↻</div><div><strong>'+esc(a.text)+'</strong><p>'+esc(a.detail)+' · '+esc(a.time)+'</p></div></div>'}
 function table(headers,rows){return '<div class="table-wrap"><table class="table"><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>'}
-function liveApptCard(a){return '<div class="appointment"><div class="time">'+esc(a.time)+'<small>'+esc(a.id)+'</small></div><div><div class="person">'+esc(a.name)+'</div><div class="detail">'+esc(a.service)+' · 
-const dataNotice=$('#appointmentDataNotice');
-if(dataNotice){
-  dataNotice.textContent=appointmentDataMode==='live'?'Live Supabase appointment records loaded (read-only). Other dashboard sections and all actions remain sample/preview-only.':appointmentDataMode==='error'?'Live appointment records could not be loaded. The list below is sample data only; no live records are being displayed.':'Sample appointments are shown until the read-only live connection is verified. Actions remain preview-only.';
-  dataNotice.style.background=appointmentDataMode==='live'?'#f0faf8':appointmentDataMode==='error'?'#fff4d7':'';
-  dataNotice.style.color=appointmentDataMode==='error'?'#674b00':'';
-}
-$('#homeAppointments').innerHTML=appointments.map(a=>apptCard(a,true)).join('');
-$('#homeTasks').innerHTML=tasks.filter(t=>!t.done).map(taskHtml).join('')||'<div class="empty">No open sample follow-ups.</div>';
-$('#homeIssues').innerHTML=issues.filter(i=>i.open).slice(0,3).map(issueHtml).join('')||'<div class="empty">All sample issues resolved.</div>';
-$('#allIssues').innerHTML=issues.map(issueHtml).join('');
-$('#issueCount').textContent=issues.filter(i=>i.open).length+' open';
-$('#taskList').innerHTML=tasks.map(taskHtml).join('')||'<div class="empty">No sample tasks.</div>';
-$('#homeActivity').innerHTML=activity.slice(0,3).map(activityHtml).join('');
-$('#activityList').innerHTML=activity.map(activityHtml).join('');
-const q=($('#apptSearch')?.value||'').toLowerCase(),st=$('#statusFilter')?.value||'',sv=$('#serviceFilter')?.value||'';
-const visibleAppointments=appointmentDataMode==='live'?liveAppointments:appointments;
-const filtered=visibleAppointments.filter(a=>(!q||(a.name+' '+a.id+' '+a.phone+' '+a.service).toLowerCase().includes(q))&&(!st||a.status===st)&&(!sv||a.service===sv));
-$('#appointmentList').innerHTML=filtered.length?filtered.map(a=>appointmentDataMode==='live'?liveApptCard(a):apptCard(a)).join(''):'<div class="empty">'+(appointmentDataMode==='live'?'No live appointments match those filters.':'No sample appointments match those filters.')+'</div>';
-const cq=($('#customerSearch')?.value||'').toLowerCase();
-const people=[...new Map(appointments.map(a=>[a.name,a])).values()].filter(a=>(a.name+' '+a.phone).toLowerCase().includes(cq));
-$('#customerList').innerHTML=table(['Customer','Contact','Appointments','Latest status'],people.map(a=>'<tr><td><strong>'+esc(a.name)+'</strong><small>Fictional demo profile</small></td><td>'+esc(a.phone)+'</td><td>'+appointments.filter(x=>x.name===a.name).length+'</td><td>'+pill(a.status)+'</td></tr>'));
-$('#paymentList').innerHTML=table(['Reference','Customer','Amount','Payment status','Action'],appointments.map(a=>'<tr><td><strong>'+a.id+'</strong><small>Sample transaction</small></td><td>'+esc(a.name)+'</td><td>$'+a.price+'.00</td><td>'+pill(a.payment)+'</td><td>'+(a.payment==='Paid'?'<button class="btn small" data-refund="'+a.id+'">Review refund</button>':'<button class="btn small" data-retry="'+a.id+'">Preview retry</button>')+'</td></tr>'));
-const cf=$('#calendarFilter')?.value||'both';let calendarRows=[];
-if(cf!=='tasks')appointments.forEach(a=>calendarRows.push({sort:a.time,title:a.time+' · '+a.name,desc:a.service+' · Appointment',status:a.status,type:'Appointment'}));
-if(cf!=='appointments')tasks.filter(t=>!t.done).forEach(t=>calendarRows.push({sort:'12:30',title:t.due+' · '+t.title,desc:t.customer+' · Follow-up reminder',status:'Follow-up needed',type:'Follow-up'}));
-$('#calendarList').innerHTML=calendarRows.map(x=>'<div class="appointment" style="padding:16px 19px"><div class="time">'+esc(x.sort)+'<small>'+x.type+'</small></div><div><div class="person">'+esc(x.title)+'</div><div class="detail">'+esc(x.desc)+'</div></div>'+pill(x.status)+'</div>').join('');
-$('#settingsList').innerHTML=[
-['Google sign-in','Restrict access to approved business accounts, enforced by the server.'],
-['Data protection','Private customer notes hidden from overview and search previews.'],
-['Stripe payments','Verify payment server-side; never trust browser-only status.'],
-['Refund approval','Require explicit owner decision and preserve transaction history.'],
-['Email reliability','Retry temporary failures; flag unresolved delivery issues.'],
-['Booking safety','Reserve the new slot before releasing an existing slot.'],
-['Audit trail','Record bookings, cancellations, reschedules, completions, access and refund actions.']
-].map(x=>'<div class="issue"><div class="issue-icon">✓</div><div><strong>'+esc(x[0])+'</strong><p>'+esc(x[1])+'</p></div></div>').join('');
-}
-function go(view){document.querySelectorAll('.section-view').forEach(s=>s.classList.toggle('active',s.id==='view-'+view));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const names={home:'Overview',appointments:'Appointments',calendar:'Calendar',customers:'Customers',payments:'Payments',followups:'Follow-ups',availability:'Availability',attention:'Needs attention',activity:'Activity log',settings:'Settings'};$('#pageTitle').textContent=names[view]||'Overview';window.scrollTo({top:0,behavior:'smooth'});if(view==='calendar')$('#calendarHeading').textContent='Sample '+($('#calendarView').value||'week').toLowerCase()}
-function log(text,detail){activity.unshift({time:'Just now · Preview',text,detail});}
-function dialog(title,body,saveLabel,onSave){$('#dialogTitle').textContent=title;$('#dialogBody').innerHTML=body;$('#dialogSave').textContent=saveLabel;$('#dialogSave').onclick=e=>{e.preventDefault();const result=onSave();if(result===false)return;$('#demoDialog').close();render()};$('#demoDialog').showModal()}
-document.addEventListener('click',e=>{
-const nav=e.target.closest('[data-view]');if(nav){go(nav.dataset.view);return}
-const jump=e.target.closest('[data-go]');if(jump){go(jump.dataset.go);return}
-const comp=e.target.closest('[data-complete]');if(comp){const a=appointments.find(x=>x.id===comp.dataset.complete);dialog('Complete sample appointment','<p style="margin:0;color:#68758b;font-size:12px">Record all required visit outcomes. This only updates the local preview.</p><label>Collection outcome<select id="outcome" required style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option value="">Choose outcome…</option><option>Successful collection</option><option>Partial collection</option><option>Unsuccessful collection</option></select></label><label>Supplies or equipment issue<select id="equipment" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option>No issue</option><option>Issue reported</option></select></label><label>Follow-up needed?<select id="needFollow" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option>No</option><option>Yes</option></select></label>','Save preview',()=>{const outcome=$('#outcome').value;if(!outcome){alert('Choose a collection outcome first.');return false}a.status=$('#needFollow').value==='Yes'?'Follow-up needed':'Completed';a.outcome=outcome;log('Sample appointment outcome recorded',a.id+' · '+outcome+' · '+$('#equipment').value);if($('#needFollow').value==='Yes'){tasks.push({id:'T-'+(tasks.length+1),title:'Follow up after '+a.name+' visit',customer:a.name,due:'Choose due date in production',done:false})}render()});return}
-const detail=e.target.closest('[data-detail]');if(detail){const a=appointments.find(x=>x.id===detail.dataset.detail);dialog('Appointment summary · '+a.id,'<p><b>'+esc(a.name)+'</b><br>'+esc(a.phone)+'<br>'+esc(a.time)+' · '+esc(a.service)+' · $'+a.price+'</p><p>'+esc(a.address)+'</p><p>Appointment status: '+esc(a.status)+'<br>Payment status: '+esc(a.payment)+'</p><p>Outcome: '+esc(a.outcome)+'</p>','Close',()=>{});$('#dialogSave').textContent='Close';return}
-const res=e.target.closest('[data-resolve]');if(res){const i=issues.find(x=>x.id===res.dataset.resolve);dialog('Resolve sample issue','<p>'+esc(i.title)+'</p><p style="color:#68758b;font-size:12px">Only resolve an alert after the underlying issue has actually been handled. In this prototype, this is a local demonstration.</p>','Mark resolved',()=>{i.open=false;log('Sample issue resolved',i.title);render()});return}
-const refund=e.target.closest('[data-refund]');if(refund){dialog('Refund review · demo','<p>Reference: '+refund.dataset.refund+'</p><p>Production flow must show original payment, requested amount, cancellation reason, applicable policy, and suggested refund. No refund is processed by this preview.</p><label>Decision<select id="refundDecision" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option>Needs more review</option><option>Approve full refund</option><option>Approve partial refund</option><option>Decline refund</option></select></label>','Save demo decision',()=>log('Refund decision previewed',$('#refundDecision').value+' · '+refund.dataset.refund));return}
-const retry=e.target.closest('[data-retry]');if(retry){dialog('Payment retry · demo','<p>Reference: '+retry.dataset.retry+'</p><p>The real system would provide a secure retry link and hold the slot for 15 minutes while checking verified provider status. This preview cannot charge a card.</p>','Got it',()=>log('Payment retry workflow previewed',retry.dataset.retry));return}
-});
-document.addEventListener('change',e=>{
-if(e.target.matches('[data-task]')){const t=tasks.find(x=>x.id===e.target.dataset.task);t.done=e.target.checked;if(t.done)log('Sample follow-up completed',t.title);else log('Sample follow-up reopened',t.title);render()}
-if(['apptSearch','statusFilter','serviceFilter','customerSearch','calendarFilter','calendarView'].includes(e.target.id))render();
-});
-$('#newAppointment').onclick=()=>dialog('New appointment · design preview','<p>The production form will validate service, contact details, address, price, and slot availability before securing a booking.</p><label>Service<select style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option>EXP Local · $60</option><option>Standard EXP · $70</option><option>Fast Track EXP · $95</option><option>After-Hours EXP · $90</option></select></label><p style="font-size:12px;color:#68758b">No appointment is created by this design preview.</p>','Close',()=>{});
-$('#newTask').onclick=()=>dialog('Create follow-up · demo','<label>Task title<input id="taskTitle" placeholder="What needs follow-up?" required style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"></label><label>Customer<select id="taskCustomer" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px">'+appointments.map(a=>'<option>'+esc(a.name)+'</option>').join('')+'</select></label><label>Due date/time<input id="taskDue" type="datetime-local" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"></label>','Add sample task',()=>{const title=$('#taskTitle').value.trim();if(!title){alert('Enter a task title.');return false}tasks.push({id:'T-'+(tasks.length+1),title,customer:$('#taskCustomer').value,due:$('#taskDue').value||'Due date not set',done:false});log('Sample follow-up created',title);render()});
-$('#blockTime').onclick=()=>{$('#blockResult').innerHTML='Preview only: before a real block is saved, the system must identify conflicting appointments and require you to resolve them. No live availability was changed.';log('Availability block flow previewed','No slot changed')};
-render();
-// Read-only appointment loading starts only after the authenticated owner gate approves access.
-
-+esc(a.price)+' · '+esc(a.payment)+'</div><div class="detail">Status: '+esc(a.status)+' · Outcome: '+esc(a.outcome)+'</div></div></div>'}
+function liveApptCard(a){return '<div class="appointment"><div class="time">'+esc(a.time)+'<small>'+esc(a.id)+'</small></div><div><div class="person">'+esc(a.name)+'</div><div class="detail">'+esc(a.service)+' · $'+esc(a.price)+' · '+esc(a.payment)+'</div><div class="detail">Status: '+esc(a.status)+' · Outcome: '+esc(a.outcome)+'</div></div></div>'}
 function render(){
 const dataNotice=$('#appointmentDataNotice');
 if(dataNotice){
@@ -249,7 +190,7 @@ async function loadLiveAppointments(){
       .select('id,service_code,service_name,starts_at,ends_at,timezone,status,quoted_amount_cents,currency,payment_status,collection_outcome,customers(full_name,phone)')
       .order('starts_at',{ascending:true}).limit(100);
     if(error) throw error;
-    appointments=(data||[]).map(row=>{
+    liveAppointments=(data||[]).map(row=>{
       const start=new Date(row.starts_at);
       const time=new Intl.DateTimeFormat('en-US',{timeZone:row.timezone||'America/Chicago',hour:'numeric',minute:'2-digit'}).format(start);
       const statusLabels={awaiting_payment:'Awaiting payment',confirmed:'Confirmed',in_progress:'In progress',completed:'Completed',follow_up_needed:'Follow-up needed',canceled:'Canceled',no_show:'No-show'};
