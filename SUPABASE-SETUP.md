@@ -42,7 +42,7 @@ Confirm exactly one row was updated. If zero rows were updated, stop and investi
 
 - RLS is a second line of defense, not a substitute for server-side authorization.
 - The current schema is a foundation. It does not yet implement Google OAuth configuration, server-side API routes, business-specific role permissions, atomic rescheduling, slot locking, Stripe webhooks, email sending, or secure customer self-service links.
-- Provider-controlled payment, notification, and audit records cannot be directly inserted/updated/deleted by browser users. Trusted server code still needs to be built and reviewed before those records can change.
+- Browser roles have read-only access to customer and appointment fields, with private-note columns excluded. Customer, appointment, staff-role, refund, follow-up, availability, payment, notification, and audit mutations must go through trusted server operations so authorization, booking conflicts, pricing, payment state, and audit logging cannot be bypassed. Those server operations still need to be built and reviewed.
 - Every refund must have an owner decision. The application service must validate the payment, refundable balance, actor, reason, and idempotency before calling Stripe.
 - The exclusion constraint blocks overlapping active appointment times in the single-provider schedule. It does not validate business hours, 75-minute start cadence, the 15-minute payment hold, travel pricing, or Google Calendar consistency.
 - Database owners/service-role clients can bypass RLS. Keep them server-side, use only for narrowly scoped trusted operations, and audit every sensitive action.
@@ -56,6 +56,7 @@ Confirm exactly one row was updated. If zero rows were updated, stop and investi
 - [ ] Verify a newly authenticated but inactive user cannot read/write operational tables.
 - [ ] Verify an active staff account can access only the intended staff functions.
 - [ ] Verify only the owner can activate accounts or approve refunds.
+- [ ] Verify customer/appointment writes and all sensitive mutations are rejected from browser roles and only authorized server operations can perform them.
 - [ ] Verify payment and notification state cannot be forged through the browser.
 - [ ] Verify audit records are append-only through the intended server interface.
 - [ ] Add automated tests for overlap conflicts, status/payment separation, completion outcomes, and refund authorization.
