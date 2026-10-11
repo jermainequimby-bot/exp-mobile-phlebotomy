@@ -49,7 +49,7 @@ for token in ("audit_events_no_update", "audit_events_no_delete", "reject_audit_
 
 # All sensitive writes must use trusted server operations, not browser table grants.
 for table in ("customers", "appointments", "refund_requests", "follow_up_tasks", "availability_blocks"):
-    if re.search(rf"grant\\s+(?:insert|update|delete|all)[^;]*on public\\.{table}\\s+to authenticated", hardening, re.S):
+    if re.search(rf"grant\s+(?:insert|update|delete|all)[^;]*on public\.{table}\s+to authenticated", hardening, re.S):
         raise SystemExit(f"Browser write grant found for {table}; mutations must be server-side")
 if "payment_status, created_by" in hardening:
     raise SystemExit("Browser must never be granted a write path for payment status")
