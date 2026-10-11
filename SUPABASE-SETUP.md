@@ -12,13 +12,13 @@ This repository change is a **database foundation**, not a connected backend. Th
 
 ## Migration
 
-The initial migration is:
+The database migrations are ordered:
 
-`supabase/migrations/202610110001_admin_foundation.sql`
+1. `supabase/migrations/202610110001_admin_foundation.sql`
+2. `supabase/migrations/202610110002_security_hardening.sql`
+3. `supabase/migrations/202610110003_self_access_status.sql`
 
-Review it before applying it to a fresh staging project. Apply using the Supabase CLI migration workflow or SQL editor. It creates the initial staff, customer, appointment, payment, refund, follow-up, availability, notification, and audit tables, with row-level security enabled and no anonymous policies.
-
-The migration has **not** been applied to any Supabase project. No project has been provisioned or connected by this repository change.
+The business owner reported manually applying migrations 1 and 2 to the dedicated `EXP Admin Staging` project and checking the resulting tables, RLS, and grants. Those checks are user-reported and have not been independently verified by this repository. Migration 3 adds a narrowly scoped `get_my_staff_access()` RPC that returns only the current authenticated user's staff status. Review it and apply it in the same staging project through the SQL Editor before proceeding. It has not been applied yet.
 
 ## First owner activation
 
@@ -63,6 +63,8 @@ Confirm exactly one row was updated. If zero rows were updated, stop and investi
 - [ ] Add server-side transactions for booking/rescheduling and a verified Stripe webhook before integration.
 - [ ] Review privacy/security requirements and backups before introducing real records.
 
-## Next implementation step
+## Self-access RPC and sign-in gate
 
-Build and test a small server-side authorization/data-access layer against a staging Supabase project, with fake records only. Do not add live integrations until the project and credentials are explicitly configured by the business owner.
+`supabase/migrations/202610110003_self_access_status.sql` adds `public.get_my_staff_access()`. It accepts no user selector, filters on `auth.uid()`, has a fixed empty `search_path`, revokes execution from `PUBLIC` and `anon`, and grants execution to `authenticated`. It is only a status check; it is not a replacement for authorization checks on future server endpoints.
+
+See `AUTH-GATE-PLAN.md` for the fail-closed sign-in flow and required verification. Google sign-in must remain disabled until the flow is implemented and reviewed. The dashboard must remain a fictional-data prototype. Do not add live integrations until the project and credentials are explicitly configured by the business owner.
