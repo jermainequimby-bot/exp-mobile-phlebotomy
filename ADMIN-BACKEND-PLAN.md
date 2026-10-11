@@ -15,7 +15,7 @@ Turn the static admin preview into a private operational dashboard without expos
 ## Recommended architecture for review
 
 - **Web app:** Keep the existing Vercel deployment path; move admin into a dedicated route or app only after confirming routing and deployment behavior.
-- **Backend/database:** Use a managed PostgreSQL service such as Supabase, with schema migrations and row-level security. All authorization checks must also be enforced server-side.
+- **Backend/database:** Supabase is the selected direction. The first migration is in `supabase/migrations/202610110001_admin_foundation.sql`; staging/owner-bootstrap guidance is in `SUPABASE-SETUP.md`. No project has been provisioned or connected. Use schema migrations and row-level security, with all authorization checks also enforced server-side.
 - **Authentication:** Google sign-in restricted to explicitly approved business accounts. A visible UI gate alone is not security.
 - **Secrets:** Store provider credentials only in server-side environment variables. Never commit secrets or expose service-role credentials to browser code.
 - **Payments:** Stripe server-side checkout/webhook verification; idempotent event handling. Browser redirects are not proof of payment.
@@ -23,7 +23,7 @@ Turn the static admin preview into a private operational dashboard without expos
 - **Email:** Server-side email provider, bounded retries, delivery state tracking, and a Needs Attention item for unresolved failures.
 - **Audit:** Append-only records for access changes, bookings, cancellations, reschedules, completion, availability changes, and refund decisions/actions.
 
-The service choices above are recommendations, not configured integrations. Confirm the chosen backend and providers before provisioning accounts or connecting live services.
+Supabase is approved as the backend direction. Google OAuth, Stripe, email, and Google Calendar are not configured integrations. Provision a dedicated staging project and validate the schema/policies before connecting any live service.
 
 ## Build sequence
 
