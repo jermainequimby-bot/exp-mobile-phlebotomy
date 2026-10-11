@@ -182,33 +182,7 @@ $('#newTask').onclick=()=>dialog('Create follow-up · demo','<label>Task title<i
 $('#blockTime').onclick=()=>{$('#blockResult').innerHTML='Preview only: before a real block is saved, the system must identify conflicting appointments and require you to resolve them. No live availability was changed.';log('Availability block flow previewed','No slot changed')};
 render();
 // Read-only appointment loading starts only after the authenticated owner gate approves access.
-async function loadLiveAppointments(){
-  if(!window.expSupabase) return;
-  try{
-    const {data,error}=await window.expSupabase.from('appointments')
-      .select('id,service_code,service_name,starts_at,ends_at,timezone,status,quoted_amount_cents,currency,payment_status,collection_outcome,customers(full_name,phone)')
-      .order('starts_at',{ascending:true}).limit(100);
-    if(error) throw error;
-    liveAppointments=(data||[]).map(row=>{
-      const start=new Date(row.starts_at);
-      const time=new Intl.DateTimeFormat('en-US',{timeZone:row.timezone||'America/Chicago',hour:'numeric',minute:'2-digit'}).format(start);
-      const statusLabels={awaiting_payment:'Awaiting payment',confirmed:'Confirmed',in_progress:'In progress',completed:'Completed',follow_up_needed:'Follow-up needed',canceled:'Canceled',no_show:'No-show'};
-      const paymentLabels={pending:'Pending',paid:'Paid',failed:'Failed',partially_refunded:'Partially refunded',refunded:'Refunded'};
-      return {id:String(row.id).slice(0,8),time,name:row.customers?.full_name||'Customer record',phone:row.customers?.phone||'',service:row.service_name||row.service_code||'Service',price:((row.quoted_amount_cents||0)/100).toFixed(2),status:statusLabels[row.status]||row.status,payment:paymentLabels[row.payment_status]||row.payment_status,address:'Address available in the protected customer record',outcome:row.collection_outcome||'Not recorded'};
-    });
-    appointmentDataMode='live';
-  }catch(error){
-    appointmentDataMode='error';
-    console.error('EXP read-only appointment load failed:',error);
-  }
-  render();
-}
-window.addEventListener('exp-auth-approved',loadLiveAppointments);
-</script>
 
-
-</body>
-</html>
 +esc(a.price)+' · '+esc(a.payment)+'</div><div class="detail">Status: '+esc(a.status)+' · Outcome: '+esc(a.outcome)+'</div></div></div>'}
 function render(){
 const dataNotice=$('#appointmentDataNotice');
