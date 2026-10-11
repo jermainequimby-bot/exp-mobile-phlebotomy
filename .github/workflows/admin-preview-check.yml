@@ -1,0 +1,91 @@
+name: Admin preview smoke checks
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "admin.html"
+      - ".github/workflows/admin-preview-check.yml"
+  push:
+    branches: [admin-dashboard-foundation]
+    paths:
+      - "admin.html"
+      - ".github/workflows/admin-preview-check.yml"
+
+jobs:
+  smoke-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Check inline JavaScript syntax
+        shell: bash
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class DashboardParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.script_depth = 0
+                  self.scripts = []
+                  self.current = []
+                  self.ids = []
+                  self.has_viewport = False
+                  self.has_preview_banner = False
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if "id" in attrs:
+                      self.ids.append(attrs["id"])
+                  if tag == "meta" and attrs.get("name") == "viewport":
+                      self.has_viewport = True
+                  if tag == "div" and "PREVIEW MODE" in attrs.get("class", ""):
+                      self.has_preview_banner = True
+                  if tag == "script":
+                      self.script_depth += 1
+                      self.current = []
+
+              def handle_data(self, data):
+                  if self.script_depth:
+                      self.current.append(data)
+
+              def handle_endtag(self, tag):
+                  if tag == "script" and self.script_depth:
+                      self.scripts.append("".join(self.current))
+                      self.script_depth -= 1
+                      self.current = []
+
+          source = Path("admin.html").read_text(encoding="utf-8")
+          parser = DashboardParser()
+          parser.feed(source)
+          parser.close()
+
+          assert parser.has_viewport, "Missing responsive viewport meta tag"
+          assert len(parser.scripts) == 1, f"Expected one inline script, got {len(parser.scripts)}"
+          assert len(parser.ids) == len(set(parser.ids)), "Duplicate HTML id found"
+          required_ids = {
+              "view-home", "view-appointments", "view-calendar", "view-customers",
+              "view-payments", "view-followups", "view-availability", "view-attention",
+              "view-activity", "view-settings", "demoDialog"
+          }
+          missing = sorted(required_ids - set(parser.ids))
+          assert not missing, f"Missing required dashboard sections: {missing}"
+          assert "FICTIONAL SAMPLE DATA" in source, "Preview-only safety banner missing"
+          Path("/tmp/admin-inline.js").write_text(parser.scripts[0], encoding="utf-8")
+          print(f"HTML smoke checks passed: {len(parser.ids)} unique IDs; {len(parser.scripts)} inline script.")
+          PY
+          node --check /tmp/admin-inline.js
+      - name: Confirm no live integration is accidentally enabled
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          source = Path("admin.html").read_text(encoding="utf-8")
+          forbidden_markers = ["sk_live_", "sk_test_", "STRIPE_SECRET_KEY"]
+          found = [marker for marker in forbidden_markers if marker in source]
+          assert not found, f"Unexpected payment secret marker(s) found: {found}"
+          assert "No Stripe connection" in source
+          assert "No sign-in" in source
+          print("Safety smoke checks passed: no embedded Stripe keys; preview-only labels present.")
+          PY

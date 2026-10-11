@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>EXP Admin | Dashboard Preview</title>
+<style>
+:root{--navy:#0b1730;--navy2:#132747;--teal:#18c6b5;--gold:#e9bd65;--ink:#172033;--muted:#68758b;--bg:#f3f6fa;--line:#e1e7ef;--white:#fff;--red:#b83e4b;--amber:#946200;--green:#147d69}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer}.demo{background:#fff4d7;color:#674b00;text-align:center;padding:8px 14px;font-size:12px;font-weight:800;letter-spacing:.04em;border-bottom:1px solid #efd89d}.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:calc(100vh - 34px)}aside{background:var(--navy);color:#d6e0ef;padding:24px 15px;display:flex;flex-direction:column;gap:24px}.brand{display:flex;gap:11px;align-items:center;padding:0 8px;color:white;font-weight:850;letter-spacing:.03em}.mark{display:grid;place-items:center;width:40px;height:40px;background:var(--teal);color:var(--navy);border-radius:12px;font-size:19px;font-weight:950}.brand small{display:block;font-size:10px;color:#9eafc7;font-weight:650;letter-spacing:.13em;margin-top:2px}.navlabel{font-size:10px;letter-spacing:.15em;color:#8295b1;padding:0 11px;margin-bottom:7px;font-weight:800}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#c5d2e5;padding:11px;border-radius:9px;text-align:left;display:flex;gap:12px;align-items:center}.nav button:hover,.nav button.active{background:#1a3154;color:white}.nav button.active{box-shadow:inset 3px 0 var(--teal)}.ico{width:18px;text-align:center;font-size:16px}.sidebottom{margin-top:auto;border-top:1px solid #293c59;padding:16px 8px 0;font-size:12px;color:#9fb0c8}.sidebottom b{color:#fff;display:block;margin-bottom:3px}main{min-width:0}.topbar{height:78px;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 clamp(18px,3vw,42px);gap:15px}.topbar h1{font-size:20px;margin:0;color:var(--navy)}.sub{font-size:12px;color:var(--muted);margin-top:3px}.profile{display:flex;align-items:center;gap:10px}.avatar{width:37px;height:37px;border-radius:50%;background:#d9f7f2;color:#086d62;display:grid;place-items:center;font-weight:900}.profile strong{display:block;font-size:12px}.profile span{font-size:11px;color:var(--muted)}.content{padding:26px clamp(18px,3vw,42px) 42px;max-width:1550px;margin:auto}.hello{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:20px}.hello h2{font-size:23px;margin:0;color:var(--navy);letter-spacing:-.03em}.hello p{color:var(--muted);margin:5px 0 0}.btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:10px 13px;border-radius:9px;font-weight:750;font-size:12px}.btn:hover{border-color:#8ba1ba}.btn.primary{background:var(--navy);color:white;border-color:var(--navy)}.btn.teal{background:var(--teal);color:var(--navy);border-color:var(--teal)}.btn.small{padding:6px 9px;font-size:11px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.metric,.panel{background:white;border:1px solid var(--line);border-radius:13px;box-shadow:0 4px 15px #17203305}.metric{padding:18px}.metric-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px;font-weight:650}.metric-icon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#eef4fa;color:var(--navy);font-size:15px}.metric strong{display:block;font-size:28px;letter-spacing:-.04em;margin-top:10px;color:var(--navy)}.metric small{color:var(--muted);font-size:11px}.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.85fr);gap:18px;align-items:start}.stack{display:grid;gap:18px}.panel{overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid var(--line)}.panel-head h3{margin:0;color:var(--navy);font-size:14px}.panel-head p{margin:3px 0 0;color:var(--muted);font-size:11px}.count{background:#fce9e9;color:var(--red);font-size:11px;font-weight:850;padding:4px 8px;border-radius:30px}.appointments{padding:0 19px}.appointment{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:12px;padding:15px 0;border-bottom:1px solid #edf1f5;align-items:center}.appointment:last-child{border-bottom:0}.time{font-weight:850;color:var(--navy);font-size:13px}.time small{display:block;color:var(--muted);font-size:10px;font-weight:550}.person{font-weight:800;color:var(--ink);font-size:13px}.detail{color:var(--muted);font-size:11px;margin-top:3px}.pill{display:inline-flex;padding:4px 8px;border-radius:30px;font-size:10px;font-weight:800;white-space:nowrap}.confirmed{background:#def6ee;color:#126b57}.awaiting{background:#fff0cf;color:#805500}.inprogress{background:#e1edff;color:#244f9a}.follow{background:#fff0d8;color:#895600}.done{background:#e9edf2;color:#556274}.actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.empty{padding:24px;color:var(--muted);text-align:center}.issue{display:flex;gap:11px;padding:14px 18px;border-bottom:1px solid #edf1f5}.issue:last-child{border-bottom:0}.issue-icon{width:30px;height:30px;flex:0 0 30px;border-radius:9px;display:grid;place-items:center;background:#fff0d8;color:#895600}.issue-icon.red{background:#fde8e8;color:var(--red)}.issue strong{font-size:12px;display:block}.issue p{font-size:11px;color:var(--muted);margin:3px 0 8px}.task{display:flex;align-items:flex-start;gap:10px;padding:13px 18px;border-bottom:1px solid #edf1f5}.task:last-child{border:0}.task input{margin-top:4px;accent-color:var(--green)}.task strong{font-size:12px}.task small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.section-view{display:none}.section-view.active{display:block}.toolbar{display:flex;gap:9px;flex-wrap:wrap;padding:15px 18px;border-bottom:1px solid var(--line)}.toolbar input,.toolbar select{border:1px solid var(--line);background:white;border-radius:8px;padding:9px 10px;color:var(--ink);min-width:145px}.notice{background:#f0faf8;border:1px solid #c9eee8;border-radius:10px;padding:12px 14px;color:#17675d;font-size:12px;margin-bottom:16px}.table-wrap{overflow-x:auto}.table{width:100%;border-collapse:collapse;min-width:620px}.table th,.table td{text-align:left;padding:13px 18px;border-bottom:1px solid #edf1f5;font-size:12px}.table th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:#fbfcfe}.table td strong{display:block}.table td small{color:var(--muted)}.placeholder{padding:34px 22px;text-align:center}.placeholder .bigicon{font-size:30px}.placeholder h3{margin:10px 0 5px;color:var(--navy)}.placeholder p{max-width:500px;margin:0 auto 16px;color:var(--muted);font-size:12px}.mobile-nav{display:none}.footer-note{text-align:center;color:#8290a4;font-size:10px;margin-top:22px}
+@media(max-width:1050px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}.stack{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}}
+@media(max-width:700px){.app{display:block}aside{display:none}.topbar{height:65px;padding:0 16px}.profile .who{display:none}.content{padding:19px 14px 90px}.hello{align-items:flex-start;flex-direction:column}.hello h2{font-size:21px}.metrics{gap:9px}.metric{padding:13px}.metric strong{font-size:24px}.metric-head{font-size:10px}.metric-icon{width:25px;height:25px}.stack{grid-template-columns:1fr}.appointment{grid-template-columns:50px minmax(0,1fr);gap:8px}.appointment .actions{grid-column:2;justify-content:flex-start}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:10;background:#fff;border-top:1px solid var(--line);padding:7px 3px calc(7px + env(safe-area-inset-bottom));justify-content:space-around}.mobile-nav button{border:0;background:transparent;color:#6d7b90;font-size:9px;display:grid;justify-items:center;gap:3px;padding:5px}.mobile-nav button.active{color:#087d70;font-weight:850}.mobile-nav .ico{font-size:17px}.toolbar input,.toolbar select{flex:1;min-width:125px}.panel-head{padding:15px}.appointments{padding:0 15px}.topbar h1{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="demo">PREVIEW MODE · FICTIONAL SAMPLE DATA · NO REAL BOOKINGS, PAYMENTS, OR CUSTOMER RECORDS</div>
+<div class="app">
+<aside>
+  <div class="brand"><div class="mark">EXP</div><div>EXP ADMIN<small>MOBILE PHLEBOTOMY</small></div></div>
+  <div><div class="navlabel">WORKSPACE</div><div class="nav" id="sideNav">
+    <button class="active" data-view="home"><span class="ico">⌂</span>Overview</button>
+    <button data-view="appointments"><span class="ico">▦</span>Appointments</button>
+    <button data-view="calendar"><span class="ico">▣</span>Calendar</button>
+    <button data-view="customers"><span class="ico">♙</span>Customers</button>
+    <button data-view="payments"><span class="ico">＄</span>Payments</button>
+    <button data-view="followups"><span class="ico">✓</span>Follow-ups</button>
+    <button data-view="availability"><span class="ico">◷</span>Availability</button>
+  </div></div>
+  <div><div class="navlabel">MANAGEMENT</div><div class="nav">
+    <button data-view="attention"><span class="ico">⚑</span>Needs Attention <span class="count">3</span></button>
+    <button data-view="activity"><span class="ico">↻</span>Activity Log</button>
+    <button data-view="settings"><span class="ico">⚙</span>Settings</button>
+  </div></div>
+  <div class="sidebottom"><b>EXP: Mobile Phlebotomy</b>Professional collection.<br>Delivered to you.<br><span style="display:block;margin-top:10px">Prototype only · No sign-in</span></div>
+</aside>
+<main>
+<header class="topbar"><div><h1 id="pageTitle">Overview</h1><div class="sub">Your operations, in one place</div></div><div class="profile"><div class="avatar">EX</div><div class="who"><strong>Preview workspace</strong><span>Owner view · sample mode</span></div></div></header>
+<div class="content">
+<section class="section-view active" id="view-home">
+  <div class="hello"><div><h2>Good morning, EXP 👋</h2><p>Here’s the snapshot of your day. Keep the next collection moving.</p></div><button class="btn primary" data-go="appointments">＋ View appointments</button></div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-head">Appointments today <span class="metric-icon">▦</span></div><strong>4</strong><small>2 upcoming · 1 in progress</small></div>
+    <div class="metric"><div class="metric-head">Completed today <span class="metric-icon">✓</span></div><strong>1</strong><small>Marked complete manually</small></div>
+    <div class="metric"><div class="metric-head">Pending payments <span class="metric-icon">＄</span></div><strong>$130</strong><small>2 sample transactions</small></div>
+    <div class="metric"><div class="metric-head">Collected today <span class="metric-icon">↗</span></div><strong>$60</strong><small>Verified sample payment only</small></div>
+  </div>
+  <div class="layout">
+    <div class="stack">
+      <section class="panel"><div class="panel-head"><div><h3>Today’s appointments</h3><p>Chronological · sample schedule</p></div><button class="btn small" data-go="appointments">All appointments ↗</button></div><div class="appointments" id="homeAppointments"></div></section>
+      <section class="panel"><div class="panel-head"><div><h3>Follow-ups</h3><p>Tasks that need a human touch</p></div><button class="btn small" data-go="followups">View tasks ↗</button></div><div id="homeTasks"></div></section>
+    </div>
+    <div class="stack">
+      <section class="panel"><div class="panel-head"><div><h3>Needs attention</h3><p>Resolve the issue, not just the alert</p></div><span class="count" id="issueCount">3 open</span></div><div id="homeIssues"></div><div style="padding:13px 18px"><button class="btn" data-go="attention">Review all issues</button></div></section>
+      <section class="panel"><div class="panel-head"><div><h3>Quick actions</h3><p>Common tasks, one tap away</p></div></div><div style="padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:9px"><button class="btn" data-go="appointments">▦ Appointments</button><button class="btn" data-go="availability">◷ Block time</button><button class="btn" data-go="followups">＋ Follow-up task</button><button class="btn" data-go="payments">＄ Review payments</button></div></section>
+      <section class="panel"><div class="panel-head"><div><h3>Recent activity</h3><p>Important changes only</p></div><button class="btn small" data-go="activity">All activity</button></div><div id="homeActivity"></div></section>
+    </div>
+  </div>
+</section>
+<section class="section-view" id="view-appointments">
+ <div class="hello"><div><h2>Appointments</h2><p>Sample records only. Status and payment status stay separate.</p></div><button class="btn primary" id="newAppointment">＋ New appointment</button></div>
+ <div class="notice" id="appointmentDataNotice" role="status">Sample appointments are shown until the read-only live connection is verified. Actions remain preview-only.</div><div style="display:flex;justify-content:flex-end;margin:10px 0"><button class="btn" id="showSampleAppointments" type="button">Switch to sample preview</button></div>
+ <div class="panel"><div class="toolbar"><input id="apptSearch" placeholder="Search sample appointments…" aria-label="Search appointments"><select id="statusFilter" aria-label="Filter appointment status"><option value="">All appointment statuses</option><option>Confirmed</option><option>In progress</option><option>Completed</option><option>Follow-up needed</option><option>Awaiting payment</option><option>Canceled</option><option>No-show</option></select><select id="serviceFilter" aria-label="Filter service"><option value="">All services</option><option>EXP Local</option><option>Standard EXP</option><option>Fast Track EXP</option><option>After-Hours EXP</option></select></div><div id="appointmentList"></div></div>
+</section>
+<section class="section-view" id="view-attention">
+ <div class="hello"><div><h2>Needs attention</h2><p>Open issues remain until the underlying work is resolved.</p></div></div><div class="notice">In the real system, payment verification, email delivery, and booking conflicts must be checked server-side.</div><div class="panel" id="allIssues"></div>
+</section>
+<section class="section-view" id="view-followups">
+ <div class="hello"><div><h2>Follow-ups</h2><p>Track tasks without losing the customer history.</p></div><button class="btn primary" id="newTask">＋ Create task</button></div><div class="panel"><div class="panel-head"><div><h3>Open tasks</h3><p>Complete a task to remove it from the open queue.</p></div></div><div id="taskList"></div></div>
+</section>
+<section class="section-view" id="view-calendar">
+ <div class="hello"><div><h2>Calendar</h2><p>Appointments and follow-ups together, visually distinct.</p></div><select id="calendarView" class="btn" aria-label="Calendar range"><option>Week</option><option>Day</option><option>Month</option></select></div><div class="notice">Preview calendar uses illustrative dates and does not read or modify Google Calendar.</div><div class="panel"><div class="panel-head"><div><h3 id="calendarHeading">Sample week</h3><p>Saturday and Sunday · 8:00 AM–6:00 PM</p></div><select id="calendarFilter" class="btn" aria-label="Calendar filter"><option value="both">Appointments + follow-ups</option><option value="appointments">Appointments only</option><option value="tasks">Follow-ups only</option></select></div><div id="calendarList"></div></div>
+</section>
+<section class="section-view" id="view-customers">
+ <div class="hello"><div><h2>Customers</h2><p>One profile per customer, with appointment history attached.</p></div></div><div class="notice">Fictional names below are for layout testing. Private notes are intentionally excluded from previews.</div><div class="panel"><div class="toolbar"><input id="customerSearch" placeholder="Search name or phone…" aria-label="Search customers"></div><div id="customerList"></div></div>
+</section>
+<section class="section-view" id="view-payments">
+ <div class="hello"><div><h2>Payments</h2><p>Verified collections are separate from pending or failed payments.</p></div></div><div class="notice">Sample transaction list only. No Stripe connection, charges, refunds, or live payment status checks are active in this prototype.</div><div class="panel"><div class="panel-head"><div><h3>Transactions</h3><p>Refunds always require explicit owner approval.</p></div></div><div id="paymentList"></div></div>
+</section>
+<section class="section-view" id="view-availability">
+ <div class="hello"><div><h2>Availability</h2><p>Protect booked appointments before blocking time.</p></div></div><div class="notice">This preview does not block live availability. A production change must show affected bookings and require resolution first.</div><div class="panel"><div class="panel-head"><div><h3>Regular hours</h3><p>Configured planning target</p></div></div><div class="appointments"><div class="appointment"><div class="time">SAT<small>Weekend</small></div><div><div class="person">8:00 AM – 6:00 PM</div><div class="detail">75-minute start spacing · 45-minute visit duration</div></div><span class="pill confirmed">Planned</span></div><div class="appointment"><div class="time">SUN<small>Weekend</small></div><div><div class="person">8:00 AM – 6:00 PM</div><div class="detail">75-minute start spacing · 45-minute visit duration</div></div><span class="pill confirmed">Planned</span></div></div><div style="padding:18px"><button class="btn primary" id="blockTime">＋ Preview block-time flow</button><div id="blockResult" class="detail" aria-live="polite" style="margin-top:12px"></div></div></div>
+</section>
+<section class="section-view" id="view-activity">
+ <div class="hello"><div><h2>Activity log</h2><p>Important events, not a record of every click.</p></div></div><div class="panel"><div id="activityList"></div></div>
+</section>
+<section class="section-view" id="view-settings">
+ <div class="hello"><div><h2>Settings & launch readiness</h2><p>Prototype checklist for the secure production build.</p></div></div><div class="notice">This page is not protected by authentication. Do not enter real customer or payment data here.</div><div class="panel"><div class="panel-head"><div><h3>Before real-world use</h3><p>These controls are planning notes, not live settings.</p></div></div><div id="settingsList"></div></div>
+</section>
+<div class="footer-note">EXP ADMIN PREVIEW · Static demo only · No backend · No authentication · No customer data</div>
+</div>
+</main>
+</div>
+<nav class="mobile-nav" id="mobileNav">
+<button class="active" data-view="home"><span class="ico">⌂</span>Home</button><button data-view="appointments"><span class="ico">▦</span>Visits</button><button data-view="calendar"><span class="ico">▣</span>Calendar</button><button data-view="attention"><span class="ico">⚑</span>Alerts</button><button data-view="followups"><span class="ico">✓</span>Tasks</button>
+</nav>
+<dialog id="demoDialog" style="border:0;border-radius:16px;padding:0;max-width:460px;width:calc(100% - 28px);box-shadow:0 20px 80px #07112655"><form method="dialog" id="demoForm"><div style="padding:20px 22px;background:#0b1730;color:#fff"><strong id="dialogTitle">Demo action</strong><div style="font-size:11px;color:#c5d2e5;margin-top:4px">Preview only · no live changes</div></div><div id="dialogBody" style="padding:22px;display:grid;gap:13px"></div><div style="padding:14px 22px;display:flex;justify-content:flex-end;gap:9px;background:#f7f9fc"><button class="btn" value="cancel">Cancel</button><button class="btn primary" id="dialogSave" value="default">Preview action</button></div></form></dialog>
+<script>
+const appointments=[
+{id:"EXP-101",time:"8:00 AM",name:"Taylor Morgan",phone:"850-555-0101",service:"EXP Local",price:60,status:"Completed",payment:"Paid",address:"Sample address · Panama City",outcome:"Successful collection"},
+{id:"EXP-102",time:"9:15 AM",name:"Jordan Ellis",phone:"850-555-0102",service:"Standard EXP",price:70,status:"Confirmed",payment:"Paid",address:"Sample address · Lynn Haven",outcome:"Not recorded"},
+{id:"EXP-103",time:"10:30 AM",name:"Casey Reed",phone:"850-555-0103",service:"Standard EXP",price:70,status:"In progress",payment:"Paid",address:"Sample address · Panama City",outcome:"Not recorded"},
+{id:"EXP-104",time:"11:45 AM",name:"Riley Parker",phone:"850-555-0104",service:"Fast Track EXP",price:95,status:"Awaiting payment",payment:"Pending",address:"Sample address · Callaway",outcome:"Not recorded"}
+];
+let issues=[
+{id:"I-1",title:"Payment still pending",desc:"EXP-104 · Sample checkout awaiting verification.",priority:"red",open:true},
+{id:"I-2",title:"Customer email needs review",desc:"EXP-103 · Sample reminder delivery was not confirmed.",priority:"amber",open:true},
+{id:"I-3",title:"Appointment outcome missing",desc:"EXP-103 · Record collection outcome after the visit.",priority:"amber",open:true}
+];
+let tasks=[
+{id:"T-1",title:"Confirm requisition is available",customer:"Jordan Ellis",due:"Today · 12:30 PM",done:false},
+{id:"T-2",title:"Review sample email delivery",customer:"Riley Parker",due:"Today · 2:00 PM",done:false}
+];
+let activity=[
+{time:"Today · 8:52 AM",text:"Sample payment marked verified",detail:"EXP-101 · Demo event"},
+{time:"Today · 8:10 AM",text:"Sample appointment completed",detail:"EXP-101 · Outcome recorded"},
+{time:"Yesterday · 4:25 PM",text:"Sample appointment confirmed",detail:"EXP-104 · Demo event"}
+];
+let appointmentDataMode='sample';
+let liveAppointments=[];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pill=s=>'<span class="pill '+({"Confirmed":"confirmed","Paid":"confirmed","Completed":"done","In progress":"inprogress","Awaiting payment":"awaiting","Pending":"awaiting","Follow-up needed":"follow"}[s]||"done")+'">'+esc(s)+'</span>';
+function apptCard(a,home=false){return '<div class="appointment" data-open-detail="'+a.id+'" role="button" tabindex="0" aria-label="Open appointment details for '+esc(a.name)+'" style="cursor:pointer"><div class="time">'+esc(a.time)+'<small>'+esc(a.id)+'</small></div><div><div class="person">'+esc(a.name)+'</div><div class="detail">'+esc(a.service)+' · $'+a.price+' · '+esc(a.payment)+'</div><div style="margin-top:6px">'+pill(a.status)+'</div></div><div class="actions">'+(a.status!=="Completed"?'<button class="btn small" data-complete="'+a.id+'">Complete</button>':'<span class="pill done">Done</span>')+' <button class="btn small" data-detail="'+a.id+'">Details</button></div></div>'}
+function taskHtml(t){return '<div class="task"><input type="checkbox" aria-label="Mark task completed: '+esc(t.title)+'" data-task="'+t.id+'" '+(t.done?'checked':'')+'><div style="flex:1"><strong>'+esc(t.title)+'</strong><small>'+esc(t.customer)+' · '+esc(t.due)+(t.done?' · Completed in preview':' · Open task')+'</small></div><button class="btn small" type="button" data-task-toggle="'+t.id+'">'+(t.done?'Reopen task':'Mark completed')+'</button></div>'}
+function issueHtml(i){return '<div class="issue"><div class="issue-icon '+(i.priority==='red'?'red':'')+'">'+(i.priority==='red'?'!':'⚑')+'</div><div style="flex:1"><strong>'+esc(i.title)+'</strong><p>'+esc(i.desc)+'</p>'+(i.open?'<button class="btn small" data-resolve="'+i.id+'">Mark resolved in preview</button>':'<span class="pill done">Resolved in preview</span>')+'</div></div>'}
+function activityHtml(a){return '<div class="issue"><div class="issue-icon">↻</div><div><strong>'+esc(a.text)+'</strong><p>'+esc(a.detail)+' · '+esc(a.time)+'</p></div></div>'}
+function table(headers,rows){return '<div class="table-wrap"><table class="table"><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>'}
+function liveApptCard(a){return '<div class="appointment"><div class="time">'+esc(a.time)+'<small>'+esc(a.id)+'</small></div><div><div class="person">'+esc(a.name)+'</div><div class="detail">'+esc(a.service)+' · $'+esc(a.price)+' · '+esc(a.payment)+'</div><div class="detail">Status: '+esc(a.status)+' · Outcome: '+esc(a.outcome)+'</div></div><div class="actions"><button class="btn small" data-live-detail="'+esc(a.id)+'">Details</button></div></div>'}
+function render(){
+const dataNotice=$('#appointmentDataNotice');
+if(dataNotice){
+  dataNotice.textContent=appointmentDataMode==='live'?'Live Supabase appointment records loaded (read-only). Other dashboard sections and all actions remain sample/preview-only.':appointmentDataMode==='error'?'Live appointment records could not be loaded. The list below is sample data only; no live records are being displayed.':'Sample appointments are shown until the read-only live connection is verified. Actions remain preview-only.';
+  dataNotice.style.background=appointmentDataMode==='live'?'#f0faf8':appointmentDataMode==='error'?'#fff4d7':'';
+  dataNotice.style.color=appointmentDataMode==='error'?'#674b00':'';
+}
+$('#homeAppointments').innerHTML=appointments.map(a=>apptCard(a,true)).join('');
+$('#homeTasks').innerHTML=tasks.filter(t=>!t.done).map(taskHtml).join('')||'<div class="empty">No open sample follow-ups.</div>';
+$('#homeIssues').innerHTML=issues.filter(i=>i.open).slice(0,3).map(issueHtml).join('')||'<div class="empty">All sample issues resolved.</div>';
+$('#allIssues').innerHTML=issues.map(issueHtml).join('');
+$('#issueCount').textContent=issues.filter(i=>i.open).length+' open';
+$('#taskList').innerHTML=tasks.map(taskHtml).join('')||'<div class="empty">No sample tasks.</div>';
+$('#homeActivity').innerHTML=activity.slice(0,3).map(activityHtml).join('');
+$('#activityList').innerHTML=activity.map(activityHtml).join('');
+const q=($('#apptSearch')?.value||'').toLowerCase(),st=$('#statusFilter')?.value||'',sv=$('#serviceFilter')?.value||'';
+const visibleAppointments=appointmentDataMode==='live'?liveAppointments:appointments;
+const filtered=visibleAppointments.filter(a=>(!q||(a.name+' '+a.id+' '+a.phone+' '+a.service).toLowerCase().includes(q))&&(!st||a.status===st)&&(!sv||a.service===sv));
+$('#appointmentList').innerHTML=filtered.length?filtered.map(a=>appointmentDataMode==='live'?liveApptCard(a):apptCard(a)).join(''):'<div class="empty">'+(appointmentDataMode==='live'?'No live appointments match those filters.':'No sample appointments match those filters.')+'</div>';
+const cq=($('#customerSearch')?.value||'').toLowerCase();
+const people=[...new Map(appointments.map(a=>[a.name,a])).values()].filter(a=>(a.name+' '+a.phone).toLowerCase().includes(cq));
+$('#customerList').innerHTML=table(['Customer','Contact','Appointments','Latest status'],people.map(a=>'<tr><td><strong>'+esc(a.name)+'</strong><small>Fictional demo profile</small></td><td>'+esc(a.phone)+'</td><td>'+appointments.filter(x=>x.name===a.name).length+'</td><td>'+pill(a.status)+'</td></tr>'));
+$('#paymentList').innerHTML=table(['Reference','Customer','Amount','Payment status','Action'],appointments.map(a=>'<tr><td><strong>'+a.id+'</strong><small>Sample transaction</small></td><td>'+esc(a.name)+'</td><td>$'+a.price+'.00</td><td>'+pill(a.payment)+'</td><td>'+(a.payment==='Paid'?'<button class="btn small" data-refund="'+a.id+'">Review refund</button>':'<button class="btn small" data-retry="'+a.id+'">Preview retry</button>')+'</td></tr>'));
+const cf=$('#calendarFilter')?.value||'both';let calendarRows=[];
+if(cf!=='tasks')appointments.forEach(a=>calendarRows.push({sort:a.time,title:a.time+' · '+a.name,desc:a.service+' · Appointment',status:a.status,type:'Appointment'}));
+if(cf!=='appointments')tasks.filter(t=>!t.done).forEach(t=>calendarRows.push({sort:'12:30',title:t.due+' · '+t.title,desc:t.customer+' · Follow-up reminder',status:'Follow-up needed',type:'Follow-up'}));
+$('#calendarList').innerHTML=calendarRows.map(x=>'<div class="appointment" style="padding:16px 19px"><div class="time">'+esc(x.sort)+'<small>'+x.type+'</small></div><div><div class="person">'+esc(x.title)+'</div><div class="detail">'+esc(x.desc)+'</div></div>'+pill(x.status)+'</div>').join('');
+$('#settingsList').innerHTML=[
+['Google sign-in','Restrict access to approved business accounts, enforced by the server.'],
+['Data protection','Private customer notes hidden from overview and search previews.'],
+['Stripe payments','Verify payment server-side; never trust browser-only status.'],
+['Refund approval','Require explicit owner decision and preserve transaction history.'],
+['Email reliability','Retry temporary failures; flag unresolved delivery issues.'],
+['Booking safety','Reserve the new slot before releasing an existing slot.'],
+['Audit trail','Record bookings, cancellations, reschedules, completions, access and refund actions.']
+].map(x=>'<div class="issue"><div class="issue-icon">✓</div><div><strong>'+esc(x[0])+'</strong><p>'+esc(x[1])+'</p></div></div>').join('');
+}
+function go(view){document.querySelectorAll('.section-view').forEach(s=>s.classList.toggle('active',s.id==='view-'+view));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const names={home:'Overview',appointments:'Appointments',calendar:'Calendar',customers:'Customers',payments:'Payments',followups:'Follow-ups',availability:'Availability',attention:'Needs attention',activity:'Activity log',settings:'Settings'};$('#pageTitle').textContent=names[view]||'Overview';window.scrollTo({top:0,behavior:'smooth'});if(view==='calendar')$('#calendarHeading').textContent='Sample '+($('#calendarView').value||'week').toLowerCase()}
+function log(text,detail){activity.unshift({time:'Just now · Preview',text,detail});}
+function dialog(title,body,saveLabel,onSave){$('#dialogTitle').textContent=title;$('#dialogBody').innerHTML=body;$('#dialogSave').textContent=saveLabel;$('#dialogSave').onclick=e=>{e.preventDefault();const result=onSave();if(result===false)return;$('#demoDialog').close();render()};$('#demoDialog').showModal()}
+document.addEventListener('click',e=>{
+const sampleMode=e.target.closest('#showSampleAppointments');if(sampleMode){appointmentDataMode='sample';render();return}
+const nav=e.target.closest('[data-view]');if(nav){go(nav.dataset.view);return}
+const jump=e.target.closest('[data-go]');if(jump){go(jump.dataset.go);return}
+const taskToggle=e.target.closest('[data-task-toggle]');if(taskToggle){const t=tasks.find(x=>x.id===taskToggle.dataset.taskToggle);if(t){t.done=!t.done;log(t.done?'Sample follow-up completed':'Sample follow-up reopened',t.title);render()}return}
+const comp=e.target.closest('[data-complete]');if(comp){const a=appointments.find(x=>x.id===comp.dataset.complete);dialog('Complete sample appointment','<p style="margin:0;color:#68758b;font-size:12px">Record all required visit outcomes. This only updates the local preview.</p><label>Collection outcome<select id="outcome" required style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option value="">Choose outcome…</option><option>Successful collection</option><option>Partial collection</option><option>Unsuccessful collection</option></select></label><label>Supplies or equipment issue<select id="equipment" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option>No issue</option><option>Issue reported</option></select></label><label>Follow-up needed?<select id="needFollow" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option>No</option><option>Yes</option></select></label>','Save preview',()=>{const outcome=$('#outcome').value;if(!outcome){alert('Choose a collection outcome first.');return false}a.status=$('#needFollow').value==='Yes'?'Follow-up needed':'Completed';a.outcome=outcome;log('Sample appointment outcome recorded',a.id+' · '+outcome+' · '+$('#equipment').value);if($('#needFollow').value==='Yes'){tasks.push({id:'T-'+(tasks.length+1),title:'Follow up after '+a.name+' visit',customer:a.name,due:'Choose due date in production',done:false})}render()});return}
+ const liveDetail=e.target.closest('[data-live-detail]');if(liveDetail){const a=liveAppointments.find(x=>x.id===liveDetail.dataset.liveDetail);if(a){dialog('Appointment summary · '+a.id,'<p><b>'+esc(a.name)+'</b><br>'+esc(a.phone||'No phone on file')+'</p><p>'+esc(a.time)+' · '+esc(a.service)+' · $'+esc(a.price)+'</p><p>Appointment status: '+esc(a.status)+'<br>Payment status: '+esc(a.payment)+'</p><p>Collection outcome: '+esc(a.outcome)+'</p><p style="color:#68758b;font-size:12px">Read-only live record. No changes will be made.</p>','Close',()=>{});$('#dialogSave').textContent='Close'}return}
+ const detail=e.target.closest('[data-detail]');if(detail){const a=appointments.find(x=>x.id===detail.dataset.detail);if(a){dialog('Appointment summary · '+a.id,'<p><b>'+esc(a.name)+'</b><br>'+esc(a.phone)+'<br>'+esc(a.time)+' · '+esc(a.service)+' · $'+a.price+'</p><p>'+esc(a.address)+'</p><p>Appointment status: '+esc(a.status)+'<br>Payment status: '+esc(a.payment)+'</p><p>Outcome: '+esc(a.outcome)+'</p>','Close',()=>{});$('#dialogSave').textContent='Close'}return}
+ const row=e.target.closest('[data-open-detail]');if(row&&!e.target.closest('button')){const a=appointments.find(x=>x.id===row.dataset.openDetail);if(a){dialog('Appointment summary · '+a.id,'<p><b>'+esc(a.name)+'</b><br>'+esc(a.phone)+'<br>'+esc(a.time)+' · '+esc(a.service)+' · $'+a.price+'</p><p>'+esc(a.address)+'</p><p>Appointment status: '+esc(a.status)+'<br>Payment status: '+esc(a.payment)+'</p><p>Outcome: '+esc(a.outcome)+'</p>','Close',()=>{});$('#dialogSave').textContent='Close';return}}
+const res=e.target.closest('[data-resolve]');if(res){const i=issues.find(x=>x.id===res.dataset.resolve);dialog('Resolve sample issue','<p>'+esc(i.title)+'</p><p style="color:#68758b;font-size:12px">Only resolve an alert after the underlying issue has actually been handled. In this prototype, this is a local demonstration.</p>','Mark resolved',()=>{i.open=false;log('Sample issue resolved',i.title);render()});return}
+const refund=e.target.closest('[data-refund]');if(refund){dialog('Refund review · demo','<p>Reference: '+refund.dataset.refund+'</p><p>Production flow must show original payment, requested amount, cancellation reason, applicable policy, and suggested refund. No refund is processed by this preview.</p><label>Decision<select id="refundDecision" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option>Needs more review</option><option>Approve full refund</option><option>Approve partial refund</option><option>Decline refund</option></select></label>','Save demo decision',()=>log('Refund decision previewed',$('#refundDecision').value+' · '+refund.dataset.refund));return}
+const retry=e.target.closest('[data-retry]');if(retry){dialog('Payment retry · demo','<p>Reference: '+retry.dataset.retry+'</p><p>The real system would provide a secure retry link and hold the slot for 15 minutes while checking verified provider status. This preview cannot charge a card.</p>','Got it',()=>log('Payment retry workflow previewed',retry.dataset.retry));return}
+});
+document.addEventListener('change',e=>{
+if(e.target.matches('[data-task]')){const t=tasks.find(x=>x.id===e.target.dataset.task);t.done=e.target.checked;if(t.done)log('Sample follow-up completed',t.title);else log('Sample follow-up reopened',t.title);render()}
+if(['apptSearch','statusFilter','serviceFilter','customerSearch','calendarFilter','calendarView'].includes(e.target.id))render();
+});
+$('#newAppointment').onclick=()=>dialog('New appointment · design preview','<p>The production form will validate service, contact details, address, price, and slot availability before securing a booking.</p><label>Service<select style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"><option>EXP Local · $60</option><option>Standard EXP · $70</option><option>Fast Track EXP · $95</option><option>After-Hours EXP · $90</option></select></label><p style="font-size:12px;color:#68758b">No appointment is created by this design preview.</p>','Close',()=>{});
+$('#newTask').onclick=()=>dialog('Create follow-up · demo','<label>Task title<input id="taskTitle" placeholder="What needs follow-up?" required style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"></label><label>Customer<select id="taskCustomer" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px">'+appointments.map(a=>'<option>'+esc(a.name)+'</option>').join('')+'</select></label><label>Due date/time<input id="taskDue" type="datetime-local" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #dbe4ef;border-radius:8px"></label>','Add sample task',()=>{const title=$('#taskTitle').value.trim();if(!title){alert('Enter a task title.');return false}tasks.push({id:'T-'+(tasks.length+1),title,customer:$('#taskCustomer').value,due:$('#taskDue').value||'Due date not set',done:false});log('Sample follow-up created',title);render()});
+$('#blockTime').onclick=()=>{$('#blockResult').innerHTML='Preview only: before a real block is saved, the system must identify conflicting appointments and require you to resolve them. No live availability was changed.';log('Availability block flow previewed','No slot changed')};
+render();
+// Read-only appointment loading starts only after the authenticated owner gate approves access.
+async function loadLiveAppointments(){
+  if(!window.expSupabase) return;
+  try{
+    const {data,error}=await window.expSupabase.from('appointments')
+      .select('id,service_code,service_name,starts_at,ends_at,timezone,status,quoted_amount_cents,currency,payment_status,collection_outcome,customers(full_name,phone)')
+      .order('starts_at',{ascending:true}).limit(100);
+    if(error) throw error;
+    liveAppointments=(data||[]).map(row=>{
+      const start=new Date(row.starts_at);
+      const time=new Intl.DateTimeFormat('en-US',{timeZone:row.timezone||'America/Chicago',hour:'numeric',minute:'2-digit'}).format(start);
+      const statusLabels={awaiting_payment:'Awaiting payment',confirmed:'Confirmed',in_progress:'In progress',completed:'Completed',follow_up_needed:'Follow-up needed',canceled:'Canceled',no_show:'No-show'};
+      const paymentLabels={pending:'Pending',paid:'Paid',failed:'Failed',partially_refunded:'Partially refunded',refunded:'Refunded'};
+      return {id:String(row.id).slice(0,8),time,name:row.customers?.full_name||'Customer record',phone:row.customers?.phone||'',service:row.service_name||row.service_code||'Service',price:((row.quoted_amount_cents||0)/100).toFixed(2),status:statusLabels[row.status]||row.status,payment:paymentLabels[row.payment_status]||row.payment_status,address:'Address available in the protected customer record',outcome:row.collection_outcome||'Not recorded'};
+    });
+    appointmentDataMode='live';
+  }catch(error){
+    appointmentDataMode='error';
+    console.error('EXP read-only appointment load failed:',error);
+  }
+  render();
+}
+window.addEventListener('exp-auth-approved',loadLiveAppointments);
+</script>
+
+<style>
+body:not(.exp-auth-approved)>.demo,body:not(.exp-auth-approved)>.app{visibility:hidden}
+#expAuthGate{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:22px;background:linear-gradient(145deg,#0b1730,#132747);color:#172033}
+#expAuthGate[hidden]{display:none}
+.auth-card{width:min(100%,440px);background:#fff;border-radius:18px;padding:30px;box-shadow:0 24px 80px #0005}
+.auth-mark{width:52px;height:52px;display:grid;place-items:center;border-radius:14px;background:#18c6b5;color:#0b1730;font-size:22px;font-weight:950;margin-bottom:18px}
+.auth-card h1{font-size:24px;color:#0b1730;margin:0 0 7px}.auth-card p{color:#68758b;font-size:13px}
+.auth-status{border-radius:9px;background:#f3f6fa;padding:12px;font-size:12px;color:#33415a;margin:16px 0}
+.auth-status.error{background:#fff0f0;color:#9b2531}
+.auth-btn{width:100%;padding:12px;border:0;border-radius:9px;background:#0b1730;color:#fff;font-weight:800}
+.auth-btn:disabled{opacity:.45;cursor:not-allowed}.auth-foot{font-size:11px!important;border-top:1px solid #e1e7ef;padding-top:14px;margin-top:18px}
+</style>
+<div id="expAuthGate" role="dialog" aria-modal="true" aria-labelledby="expAuthTitle">
+  <section class="auth-card">
+    <div class="auth-mark">EXP</div>
+    <h1 id="expAuthTitle">EXP Admin</h1>
+    <p>Secure sign-in for approved administrators.</p>
+    <div id="expAuthStatus" class="auth-status" role="status">Checking sign-in configuration…</div>
+    <button id="expGoogleSignIn" class="auth-btn" type="button" disabled>Continue with Google</button>
+    <button id="expSignOut" class="auth-btn" type="button" hidden style="margin-top:9px;background:#fff;color:#0b1730;border:1px solid #e1e7ef">Sign out</button>
+    <p class="auth-foot">Access is restricted to an explicitly activated owner account. This gate protects the preview interface only; it is not a substitute for server-side authorization on real customer or payment data.</p>
+  </section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/*
+ * STAGING CONFIGURATION ONLY:
+ * Replace these placeholders with the Supabase project URL and publishable/anon
+ * key from the staging project. A publishable/anon key is intended for browser
+ * use; NEVER put a service_role or secret key here.
+ */
+const EXP_SUPABASE_URL = 'https://pqqfdffbdbabcdyudxhu.supabase.co';
+const EXP_SUPABASE_ANON_KEY = 'sb_publishable_Kc6DN57bnwba_FQsn7A3cA_Ql1kPqlz';
+const expGate = document.getElementById('expAuthGate');
+const expStatus = document.getElementById('expAuthStatus');
+const expSignIn = document.getElementById('expGoogleSignIn');
+const expSignOut = document.getElementById('expSignOut');
+let expSupabase = null;
+let expChecking = false;
+function expSetStatus(message, isError=false) {
+  expStatus.textContent = message;
+  expStatus.classList.toggle('error', isError);
+}
+function expLock(message, isError=false) {
+  document.body.classList.remove('exp-auth-approved');
+  expGate.hidden = false;
+  expSignOut.hidden = true;
+  expSignIn.disabled = !expSupabase;
+  expSetStatus(message, isError);
+}
+async function expCheckSession(session) {
+  if (expChecking) return;
+  expChecking = true;
+  expLock('Verifying your approved access…');
+  try {
+    if (!session?.user) {
+      expLock('Sign in with your approved business Google account.');
+      return;
+    }
+    const { data, error } = await expSupabase.rpc('get_my_staff_access');
+    if (error) throw error;
+    if (!Array.isArray(data) || data.length !== 1) {
+      await expSupabase.auth.signOut();
+      expLock('Access denied. Your staff profile is not provisioned.', true);
+      return;
+    }
+    const profile = data[0];
+    if (profile.is_active !== true || profile.role !== 'owner' ||
+        profile.user_id !== session.user.id) {
+      await expSupabase.auth.signOut();
+      expLock('Access denied. An active owner profile is required.', true);
+      return;
+    }
+    expGate.hidden = true;
+    document.body.classList.add('exp-auth-approved');
+    window.expSupabase = expSupabase;
+    window.dispatchEvent(new Event('exp-auth-approved'));
+  } catch (err) {
+    document.body.classList.remove('exp-auth-approved');
+    expGate.hidden = false;
+    expSignOut.hidden = false;
+    expSignIn.disabled = true;
+    expSetStatus('Access could not be verified. The dashboard remains locked. Check staging configuration and the access-status function, then retry.', true);
+    console.error('EXP admin access verification failed:', err);
+  } finally {
+    expChecking = false;
+  }
+}
+if (!window.supabase?.createClient) {
+  expLock('Sign-in library did not load. The dashboard remains locked.', true);
+} else if (!/^https:\/\/[^/]+\.supabase\.co$/.test(EXP_SUPABASE_URL) ||
+           EXP_SUPABASE_URL.includes('YOUR-STAGING') ||
+           EXP_SUPABASE_ANON_KEY.includes('YOUR_SUPABASE')) {
+  expLock('Staging sign-in is not configured yet. Add the staging project URL and publishable/anon key in the deployment configuration.', true);
+} else {
+  expSupabase = window.supabase.createClient(EXP_SUPABASE_URL, EXP_SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
+  expSignIn.disabled = false;
+  expSetStatus('Ready for staging sign-in. Only an active owner profile will be admitted.');
+  expSupabase.auth.getSession().then(({data, error}) => {
+    if (error) expLock('Could not read the sign-in session. The dashboard remains locked.', true);
+    else expCheckSession(data.session);
+  }).catch(() => expLock('Could not read the sign-in session. The dashboard remains locked.', true));
+  expSupabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') expLock('You are signed out.');
+    else if (session) setTimeout(() => expCheckSession(session), 0);
+  });
+}
+expSignIn.addEventListener('click', async () => {
+  if (!expSupabase) return;
+  expSignIn.disabled = true;
+  expSetStatus('Redirecting to Google…');
+  const { error } = await expSupabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + window.location.pathname }
+  });
+  if (error) {
+    expSignIn.disabled = false;
+    expSetStatus('Google sign-in could not start. Check the staging OAuth settings.', true);
+  }
+});
+expSignOut.addEventListener('click', async () => {
+  if (!expSupabase) return;
+  const { error } = await expSupabase.auth.signOut();
+  if (error) expSetStatus('Sign-out could not be confirmed. Close this tab and review the staging session.', true);
+});
+</script>
+
+</body>
+</html>
